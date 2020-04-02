@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">Yates</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="full_name">Full Name</string>
+    <string name="description">Description</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="welcome">Welcome</string>
+    <string name="auth_error">Invalid Username or Password!</string>
+    <string name="empty_error">Cannot be Empty!</string>
+    <string name="loading">Loading...</string>
+    <string name="fullname_short">Name is too short (min. 5 characters)</string>
+    <string name="email_invalid">Email is invalid</string>
+    <string name="password_invalid">Password must be alphanumeric</string>
+    <string name="username_exist">Username already exist</string>
+    <string name="register_succes">Register Success!</string>
 </resources>
