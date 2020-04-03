@@ -9,26 +9,25 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
-import com.abencrauz.yates.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.util.regex.Pattern
 
-class AccountActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
 
     val db = Firebase.firestore
     val storage = Firebase.storage
+
     var editTextList:MutableList<TextInputEditText> = mutableListOf()
     var textInputLayoutList:MutableList<TextInputLayout> = mutableListOf()
 
-    var users = User()
+    var users = HomeActivity.users
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account)
+        setContentView(R.layout.activity_edit_profile)
 
         initializeTextInputEditText()
         initializeTextInputLayout()
@@ -36,12 +35,8 @@ class AccountActivity : AppCompatActivity() {
         val updateProfileBtn = findViewById<Button>(R.id.update_profile_btn)
         val cancelUpdateBtn = findViewById<Button>(R.id.cancel_update_btn)
 
-        val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
-        var editor = sharedPreferences.edit()
-        editor.putString("user_id", "pqCRQXmE9NFCv9jdnegt")
-        editor.commit()
-
-        getUserAccountData(updateProfileBtn)
+        setTextInputEditText()
+        textChangeListener(updateProfileBtn)
         buttonListener(cancelUpdateBtn, updateProfileBtn)
     }
 
@@ -116,35 +111,17 @@ class AccountActivity : AppCompatActivity() {
 
     private fun buttonListener(cancelUpdateBtn:Button, updateProfileBtn:Button){
         cancelUpdateBtn.setOnClickListener(){
-            val toHomeActivity = Intent(this, HomeActivity::class.java)
-            toHomeActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(toHomeActivity)
+            val toProfileActivity = Intent(this, ProfileActivity::class.java)
+            toProfileActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(toProfileActivity)
         }
         updateProfileBtn.setOnClickListener(){
             if(validate()){
                 updateProfile(updateProfileBtn)
             }else{
-                Toast.makeText(this, "Failed Update Profile", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Failed Update Profile", Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    private fun getUserAccountData(updateProfileBtn: Button){
-//      Sharepreference usersDocumentId
-        val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("user_id", "")
-        val userRef = db.collection("users").document( userId.toString() )
-        userRef.get()
-            .addOnSuccessListener { document ->
-//                Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-                users.fullname = document.data?.get("fullname").toString()
-                users.username = document.data?.get("username").toString()
-                users.password = document.data?.get("password").toString()
-                users.email = document.data?.get("email").toString()
-                users.description = document.data?.get("description").toString()
-                setTextInputEditText()
-                textChangeListener(updateProfileBtn)
-            }
     }
 
     private fun setTextInputEditText(){
@@ -155,17 +132,26 @@ class AccountActivity : AppCompatActivity() {
         editTextList[4].setText(users.description)
     }
 
+    private fun setUsers(){
+        users.fullname = editTextList[0].text.toString()
+        users.username = editTextList[1].text.toString()
+        users.password = editTextList[2].text.toString()
+        users.email = editTextList[3].text.toString()
+        users.description = editTextList[4].text.toString()
+    }
+
     private fun updateProfile(updateProfileBtn: Button){
+        setUsers()
         val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", "")
         val userRef = db.collection("users").document( userId.toString() )
         userRef.update(
             mapOf(
-                "fullname" to editTextList[0].text.toString(),
-                "username" to editTextList[1].text.toString(),
-                "password" to editTextList[2].text.toString(),
-                "email" to editTextList[3].text.toString(),
-                "description" to editTextList[4].text.toString()
+                "fullname" to users.fullname,
+                "username" to users.username,
+                "password" to users.password,
+                "email" to users.email,
+                "description" to users.description
             )
         ).addOnSuccessListener {
             Toast.makeText(this, "Success Update Profile", Toast.LENGTH_LONG).show()

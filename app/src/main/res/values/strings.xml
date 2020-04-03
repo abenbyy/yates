@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Yates</string>
     <string name="login">Login</string>
-    <string name="account">Account</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="fullname">Fullname</string>
     <string name="username">Username</string>
     <string name="password">Password</string>

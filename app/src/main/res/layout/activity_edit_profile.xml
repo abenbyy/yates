@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountActivity"
-    android:orientation="vertical"
-    android:scrollbars="vertical">
+    tools:context=".EditProfileActivity"
+    android:orientation="vertical">
 
     <!--   Profile Picture  -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,13 @@
             android:src="@drawable/default_account_image"
             app:civ_border_width="1dp"
             app:civ_border_color="#FFFFFF"
-            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:id="@+id/change_profile_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Profile Picture"
+            android:textColor="@color/primaryBlue"
             />
 
     </LinearLayout>
@@ -57,6 +63,8 @@
                 android:id="@+id/fullname_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,6 +92,8 @@
                 android:id="@+id/username_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -114,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -141,11 +152,14 @@
                 android:id="@+id/email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
+    <!--  Describe   -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
