@@ -2,4 +2,9 @@
     <string name="app_name">Yates</string>
     <string name="login">Login</string>
     <string name="account">Account</string>
+    <string name="fullname">Fullname</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="describe_yourself">Describe Yourself</string>
 </resources>

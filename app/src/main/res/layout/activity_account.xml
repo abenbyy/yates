@@ -38,21 +38,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="FullName"
-            android:fontFamily="@font/raisonne_font"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textSize="20sp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fullname_tl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_weight="0.2"
+            app:errorEnabled="true"
+            android:hint="@string/fullname"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,21 +66,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Username"
-            android:fontFamily="@font/raisonne_font"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textSize="20sp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username_tl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_weight="0.2"
+            app:errorEnabled="true"
+            android:hint="@string/username"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -98,22 +93,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Password"
-            android:fontFamily="@font/raisonne_font"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textSize="20sp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_tl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_weight="0.2"
             app:passwordToggleEnabled="true"
+            app:errorEnabled="true"
+            android:hint="@string/password"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -131,21 +123,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Email"
-            android:fontFamily="@font/raisonne_font"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textSize="20sp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_tl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_weight="0.2"
+            app:errorEnabled="true"
+            android:hint="@string/email"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -160,20 +149,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Description"
-            android:fontFamily="@font/raisonne_font"
-            android:gravity="center_vertical"
-            android:textSize="20sp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="@string/describe_yourself"
             >
 
             <com.google.android.material.textfield.TextInputEditText

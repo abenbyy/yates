@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.abencrauz.yates.model.User
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -21,6 +22,7 @@ class AccountActivity : AppCompatActivity() {
     val db = Firebase.firestore
     val storage = Firebase.storage
     var editTextList:MutableList<TextInputEditText> = mutableListOf()
+    var textInputLayoutList:MutableList<TextInputLayout> = mutableListOf()
 
     var users = User()
 
@@ -28,11 +30,9 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
-        editTextList.add(findViewById(R.id.fullname_et))
-        editTextList.add(findViewById(R.id.username_et))
-        editTextList.add(findViewById(R.id.password_et))
-        editTextList.add(findViewById(R.id.email_et))
-        editTextList.add(findViewById(R.id.description_et))
+        initializeTextInputEditText()
+        initializeTextInputLayout()
+
         val updateProfileBtn = findViewById<Button>(R.id.update_profile_btn)
         val cancelUpdateBtn = findViewById<Button>(R.id.cancel_update_btn)
 
@@ -45,10 +45,29 @@ class AccountActivity : AppCompatActivity() {
         buttonListener(cancelUpdateBtn, updateProfileBtn)
     }
 
+    private fun initializeTextInputEditText(){
+        editTextList.add(findViewById(R.id.fullname_et))
+        editTextList.add(findViewById(R.id.username_et))
+        editTextList.add(findViewById(R.id.password_et))
+        editTextList.add(findViewById(R.id.email_et))
+        editTextList.add(findViewById(R.id.description_et))
+    }
+
+    private fun initializeTextInputLayout(){
+        textInputLayoutList.add(findViewById(R.id.fullname_tl))
+        textInputLayoutList.add(findViewById(R.id.username_tl))
+        textInputLayoutList.add(findViewById(R.id.password_tl))
+        textInputLayoutList.add(findViewById(R.id.email_tl))
+    }
+
     private fun textChangeListener(updateProfileBtn:Button){
         editTextList[0].addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 updateProfileBtn.isEnabled = true
+                if(!validateFullname())
+                    textInputLayoutList[0].error = "Fullname length min 3 characters"
+                else
+                    textInputLayoutList[0].error = null
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -56,6 +75,10 @@ class AccountActivity : AppCompatActivity() {
         editTextList[1].addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 updateProfileBtn.isEnabled = true
+                if(!validateUsername())
+                    textInputLayoutList[1].error = "Username has already been taken"
+                else
+                    textInputLayoutList[1].error = null
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -63,6 +86,10 @@ class AccountActivity : AppCompatActivity() {
         editTextList[2].addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 updateProfileBtn.isEnabled = true
+                if(!validatePassword())
+                    textInputLayoutList[2].error = "Password must be alphanumeric"
+                else
+                    textInputLayoutList[2].error = null
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -70,6 +97,10 @@ class AccountActivity : AppCompatActivity() {
         editTextList[3].addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 updateProfileBtn.isEnabled = true
+                if(!validateEmail())
+                    textInputLayoutList[3].error = "Email must use an email format"
+                else
+                    textInputLayoutList[3].error = null
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -137,10 +168,10 @@ class AccountActivity : AppCompatActivity() {
                 "description" to editTextList[4].text.toString()
             )
         ).addOnSuccessListener {
-            Toast.makeText(this, "Success Update Profile", Toast.LENGTH_LONG)
+            Toast.makeText(this, "Success Update Profile", Toast.LENGTH_LONG).show()
             updateProfileBtn.isEnabled= false
         }.addOnFailureListener {
-            Toast.makeText(this, "Failed Update Profile", Toast.LENGTH_LONG)
+            Toast.makeText(this, "Failed Update Profile", Toast.LENGTH_LONG).show()
         }
     }
 
