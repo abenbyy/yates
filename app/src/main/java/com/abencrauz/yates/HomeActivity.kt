@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.abencrauz.yates.model.User
+import com.abencrauz.yates.models.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
