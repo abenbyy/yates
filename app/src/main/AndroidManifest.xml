@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
+
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/AppThemeWithoutActionBar" />
@@ -19,17 +19,18 @@
         <activity
             android:name=".EditProfileActivity"
             android:label="@string/edit_profile" />
-=======
-        <activity android:name=".RegisterActivity"></activity>
->>>>>>> auth-activity
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
     </application>
 
 </manifest>

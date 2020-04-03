@@ -1,8 +1,11 @@
 package com.abencrauz.yates
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -30,31 +33,90 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         initComponent()
 
+        etFullname.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val fullname = etFullname.text.toString()
+                if (fullname.length < 3) {
+                    Log.d("Validation fail", "fullname")
+                    etFullname.error = getString(R.string.fullname_short)
+                    //Toast.makeText(this, getString(R.string.fullname_short), Toast.LENGTH_LONG).show()
+                    toggleLoading(false)
+                }else{
+                    etFullname.error = null
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
+        etEmail.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val email = etEmail.text.toString()
+                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    Log.d("Validation fail", "email")
+                    etEmail.error = getString(R.string.email_invalid)
+                    //Toast.makeText(this, getString(R.string.email_invalid),Toast.LENGTH_LONG).show()
+                    toggleLoading(false)
+                }else{
+                    etEmail.error = null
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
+
+        etPassword.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if(!validatePassword()){
+                    Log.d("Validation fail", "password")
+                    etPassword.error = getString(R.string.password_invalid)
+                    //Toast.makeText(this, getString(R.string.password_invalid), Toast.LENGTH_LONG).show()
+                    toggleLoading(false)
+
+                }else{
+                    etPassword.error = null
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
         btnReg.setOnClickListener(View.OnClickListener {
             toggleLoading(true)
             val fullname = etFullname.text.toString()
             if (fullname.length < 3) {
                 Log.d("Validation fail", "fullname")
-                Toast.makeText(this, getString(R.string.fullname_short), Toast.LENGTH_LONG).show()
+                etFullname.error = getString(R.string.fullname_short)
+                //Toast.makeText(this, getString(R.string.fullname_short), Toast.LENGTH_LONG).show()
                 toggleLoading(false)
                 return@OnClickListener
+            }else{
+                etFullname.error = null
             }
 
             val email = etEmail.text.toString()
             if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                 Log.d("Validation fail", "email")
-                Toast.makeText(this, getString(R.string.email_invalid),Toast.LENGTH_LONG).show()
+                etEmail.error = getString(R.string.email_invalid)
+                //Toast.makeText(this, getString(R.string.email_invalid),Toast.LENGTH_LONG).show()
                 toggleLoading(false)
                 return@OnClickListener
+            }else{
+                etEmail.error = null
             }
 
-//            val password = etPassword.text.toString()
-//            if(!isAlphaNumeric(password)){
-//                Log.d("Validation fail", "password")
-//                Toast.makeText(this, getString(R.string.password_invalid), Toast.LENGTH_LONG).show()
-//                toggleLoading(false)
-//                return@OnClickListener
-//            }
+
+            if(!validatePassword()){
+                Log.d("Validation fail", "password")
+                etPassword.error = getString(R.string.password_invalid)
+                //Toast.makeText(this, getString(R.string.password_invalid), Toast.LENGTH_LONG).show()
+                toggleLoading(false)
+
+            }else{
+                etPassword.error = null
+            }
 
             val username = etUsername.text.toString()
             val query = userRef.whereEqualTo("username",username)
@@ -62,9 +124,11 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnSuccessListener { documents->
                     ///Log.d("Result", "${documents.size()} data found regarding ${username}")
                     if(documents.size() > 0){
-                        Toast.makeText(this, getString(R.string.username_exist), Toast.LENGTH_LONG).show()
+                        etUsername.error = getString(R.string.username_exist)
+                        //Toast.makeText(this, getString(R.string.username_exist), Toast.LENGTH_LONG).show()
                         toggleLoading(false)
                     }else{
+                        etUsername.error = null
                         toggleLoading(true)
                         registerUser()
                     }
@@ -100,20 +164,23 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
-    fun isAlphaNumeric(ss: String): Boolean {
-        var c1=0
-        var c2=0
-        val s = ss.toCharArray()
-        for(i in 1..ss.length){
-            if(s[i] in 'A'..'Z' || s[i] in 'a'..'z'){
-                c1++
-            }else if(s[i] in '0'..'9'){
-                c2++
-            }
+    private fun validatePassword():Boolean{
+        var symbol = 0
+        var digit = 0
+        var alpha = 0
+        val password = etPassword.text.toString()
+        for (i in password.indices){
+            if (password[i].isLetter())
+                alpha++
+            else if(password[i].isDigit())
+                digit++
+            else if(!password[i].isLetter() and !password[i].isDigit() and (password[i] != ' '))
+                symbol++
         }
-
-        return c1>0 && c2>0
+        return ((alpha!=0) and (digit!=0) and (symbol==0))
     }
+
+
 
     fun registerUser(){
         val data = User(
@@ -132,6 +199,8 @@ class RegisterActivity : AppCompatActivity() {
                 editor.commit()
                 Toast.makeText(this, getString(R.string.register_succes), Toast.LENGTH_LONG).show()
                 toggleLoading(false)
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
             }
 
 

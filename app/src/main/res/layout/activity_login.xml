@@ -44,7 +44,7 @@
             android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/raisonne_font"
+
             android:textSize="20sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +59,7 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/raisonne_font"
+
             android:textSize="20sp"
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -89,7 +89,7 @@
 
             android:background="@color/primaryBlue"
             android:textColor="@color/backWhite"
-            android:fontFamily="@font/raissone_regular"
+
             android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
             android:text="@string/login"/>
         <com.google.android.gms.common.SignInButton
@@ -119,7 +119,7 @@
 
         android:background="@color/primaryBlue"
         android:textColor="@color/backWhite"
-        android:fontFamily="@font/raissone_regular"
+
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:text="@string/register"/>
 

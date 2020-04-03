@@ -61,6 +61,9 @@ class LoginActivity : AppCompatActivity() {
                             val editor = sharedPreferences.edit()
                             editor.putString("user_id", document.id)
                             editor.commit()
+
+                            val intent = Intent(this, HomeActivity::class.java)
+                            startActivity(intent)
                         }
 
                     }
@@ -111,10 +114,14 @@ class LoginActivity : AppCompatActivity() {
                 if(documents.size()>0){
                     for(document in documents){
                         user = document.data
-
+                        val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("user_id", document.id)
+                        editor.commit()
                         var message = getString(R.string.welcome)+", "+ user["fullname"].toString()
                         Toast.makeText(this,message, Toast.LENGTH_LONG).show()
-
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
                     }
                 }else{
                     Toast.makeText(this,getString(R.string.auth_error), Toast.LENGTH_LONG).show()
@@ -163,6 +170,8 @@ class LoginActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.putString("user_id", document.id)
                         editor.commit()
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
                     }
                 }else{
                     registerUser(account)
@@ -191,6 +200,8 @@ class LoginActivity : AppCompatActivity() {
                 editor.commit()
                 Toast.makeText(this, getString(R.string.register_succes), Toast.LENGTH_LONG).show()
                 toggleLoad(false)
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
             }
 
 

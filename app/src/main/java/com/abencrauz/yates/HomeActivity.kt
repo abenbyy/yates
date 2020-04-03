@@ -23,10 +23,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
-        var editor = sharedPreferences.edit()
-        editor.putString("user_id", "pqCRQXmE9NFCv9jdnegt")
-        editor.commit()
 
         initializeBottomNavigationMenu()
         getUserAccountData()
