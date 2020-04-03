@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1071516260384",
+    "firebase_url": "https://yates-35330.firebaseio.com",
+    "project_id": "yates-35330",
+    "storage_bucket": "yates-35330.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071516260384:android:3ab0b0f767d3dbd0b84445",
+        "android_client_info": {
+          "package_name": "com.abencrauz.yates"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071516260384-2o1s5nta2fpqsdak866eg9s7iqgv8qcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6GqLTIvU4Jp9JZGs8tsUwe4Mgt9Ou9cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071516260384-2o1s5nta2fpqsdak866eg9s7iqgv8qcb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
