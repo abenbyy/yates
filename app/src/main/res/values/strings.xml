@@ -22,5 +22,8 @@
     <string name="password_invalid">Password must be alphanumeric</string>
     <string name="username_exist">Username already exist</string>
     <string name="register_succes">Register Success!</string>
+    
+    <string name="dont_see_restaurant">Don\'t see your restaurant?</string>
+    <string name="add_restaurant">Add Restaurant</string>
 
 </resources>
