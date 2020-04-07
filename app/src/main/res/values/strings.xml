@@ -22,8 +22,22 @@
     <string name="password_invalid">Password must be alphanumeric</string>
     <string name="username_exist">Username already exist</string>
     <string name="register_succes">Register Success!</string>
-    
+
+
     <string name="dont_see_restaurant">Don\'t see your restaurant?</string>
     <string name="add_restaurant">Add Restaurant</string>
+
+    <string name="by_type">Browse by Type</string>
+    <string name="by_meal">Browse by Meal</string>
+
+    <string name="view_map">View on Map</string>
+    <string name="review">Reviews</string>
+
+    <string name="want_to_eat">Want to Eat Here?</string>
+    <string name="book_a_table">Book a Table</string>
+    <string name="address">Address</string>
+    <string name="out_of_reviews">Out of 0 Review(s)</string>
+    <string name="title_activity_restaurant_location">Map</string>
+
 
 </resources>

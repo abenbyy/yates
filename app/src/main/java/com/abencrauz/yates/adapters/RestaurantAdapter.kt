@@ -1,13 +1,16 @@
 package com.abencrauz.yates.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.R
+import com.abencrauz.yates.RestaurantDetailActivity
 import com.abencrauz.yates.models.Restaurant
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,7 +24,7 @@ class RestaurantAdapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private var db = Firebase.firestore
     private var storage = Firebase.storage.reference.child("image/")
 
-    private lateinit var context: Context
+    private var context: Context
     private var restaurants : Vector<Restaurant> = Vector()
 
     constructor(context: Context){
@@ -48,13 +51,21 @@ class RestaurantAdapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
         holder.tvMeal.text = restaurants.get(position).type
         holder.tvMeal.text = restaurants.get(position).meal
 
+        holder.cvRestaurant.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, RestaurantDetailActivity::class.java)
+            intent.putExtra("restaurantName", restaurants.get(position).name)
+            context.startActivity(intent)
+        })
+
     }
 
     class ViewHolder: RecyclerView.ViewHolder {
+
         var ivImage : ImageView
         var tvName: TextView
         var tvMeal : TextView
         var tvType: TextView
+        var cvRestaurant: CardView
 
         constructor(restaurantView:View) : super(restaurantView){
 
@@ -62,6 +73,7 @@ class RestaurantAdapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
             tvName = restaurantView.findViewById(R.id.tv_name)
             tvMeal = restaurantView.findViewById(R.id.tv_meal)
             tvType = restaurantView.findViewById(R.id.tv_type)
+            cvRestaurant = restaurantView.findViewById(R.id.cv_restaurant)
         }
     }
 }
