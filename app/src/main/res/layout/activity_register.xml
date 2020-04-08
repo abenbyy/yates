@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
+            app:startIconDrawable="@drawable/ic_person"
             app:errorEnabled="true"
             android:hint="@string/full_name">
 
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
+            app:startIconDrawable="@drawable/ic_email"
             app:errorEnabled="true"
             android:hint="Email">
 
@@ -76,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
+            app:startIconDrawable="@drawable/ic_smile"
             app:errorEnabled="true"
             android:hint="Username"
             >
@@ -94,6 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
+            app:startIconDrawable="@drawable/ic_key"
             android:hint="Password"
             app:errorEnabled="true"
             app:endIconMode="password_toggle">

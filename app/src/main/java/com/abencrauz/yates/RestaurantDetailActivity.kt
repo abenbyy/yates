@@ -1,25 +1,41 @@
 package com.abencrauz.yates
 
 import android.content.Intent
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.abencrauz.yates.adapters.RestaurantReviewAdapter
+import com.abencrauz.yates.models.Review
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class RestaurantDetailActivity : AppCompatActivity() {
     private var restaurant: Map<String,Any> = mutableMapOf()
+    private var reviews : Vector<Review> = Vector()
     private val db = Firebase.firestore
     private val restRef = db.collection("restaurants")
+    private val revRef = db.collection("user-reviews")
     private lateinit var pb: ProgressBar
     private lateinit var restaurantName: String
     private lateinit var restaurantId: String
     lateinit var cont: LinearLayout
+
+    private lateinit var rvReview: RecyclerView
+    private lateinit var reviewAdapter:RestaurantReviewAdapter
 
     private lateinit var ivImage: ImageView
     private lateinit var tvName:TextView
@@ -27,7 +43,9 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private lateinit var tvType:TextView
     private lateinit var tvHours:TextView
     private lateinit var tvAddress:TextView
+    private lateinit var tvAddrev: TextView
     private lateinit var btnMap: MaterialButton
+    private lateinit var btnBook: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +54,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         cont = findViewById(R.id.cont_detail)
         pb = findViewById(R.id.pb)
         toggleLoad(true)
+        restaurantId = ""
         initComponents()
         val intent = intent
         restaurantName = intent.getStringExtra("restaurantName")
@@ -47,6 +66,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                     restaurantId = documents.first().id
                     restaurant = documents.first().data
                     handleRestaurantData()
+                    bindReview()
                 }else{
                     Toast.makeText(this, "Seems there is an error",Toast.LENGTH_LONG)
                 }
@@ -55,15 +75,66 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        if(restaurantId != ""){
+            bindReview()
+        }
+    }
+
+
+    fun bindReview(){
+        var q = revRef.whereEqualTo("restaurantId",restaurantId)
+        q.get()
+            .addOnSuccessListener { documents ->
+                if(documents.size()>0){
+                    reviews = Vector()
+                    for(document in documents){
+                        val rev = document.toObject<Review>()
+                        var temp = document.data
+
+                        reviews.add(rev)
+//                        reviews.add(Review(
+//                            temp["hotelId"].toString(),
+//                            temp["restaurantId"].toString(),
+//                            temp["userId"].toString(),
+//                            temp["image"].toString(),
+//                            Date(temp["timeStamp"]),
+//                            temp["rating"].toString().toInt(),
+//                            temp["title"].toString(),
+//                            temp["description"].toString()
+//                        ))
+                    }
+
+
+                    reviewAdapter.setReview(reviews)
+                    reviewAdapter.notifyDataSetChanged()
+
+                }
+            }
+    }
+
     fun initComponents(){
+        rvReview = findViewById(R.id.rv_reviews)
         ivImage = findViewById(R.id.iv_image)
         tvName = findViewById(R.id.tv_name)
         tvMeal = findViewById(R.id.tv_meal)
         tvType = findViewById(R.id.tv_type)
         tvHours = findViewById(R.id.tv_hours)
         tvAddress = findViewById(R.id.tv_address)
+        tvAddrev = findViewById(R.id.tv_addrev)
 
         btnMap = findViewById(R.id.btn_map)
+        btnBook = findViewById(R.id.btn_book)
+
+        reviewAdapter = RestaurantReviewAdapter(this)
+        rvReview.apply {
+            layoutManager = LinearLayoutManager(this@RestaurantDetailActivity,RecyclerView.VERTICAL, false)
+            adapter = reviewAdapter
+        }
+        rvReview.isNestedScrollingEnabled = false
+
+
     }
 
     fun handleRestaurantData(){
@@ -78,10 +149,25 @@ class RestaurantDetailActivity : AppCompatActivity() {
 //                Uri.parse("geo:0,0?q="+Uri.encode(restaurant["name"].toString()))
 //            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
 //            mapIntent.setPackage("com.google.android.apps.maps")
-            val mapIntent = Intent(this, RestaurantLocationActivity::class.java)
-            mapIntent.putExtra("restaurantName", restaurant["name"].toString())
+            val mapIntent = Intent(this, LocationActivity::class.java)
+            mapIntent.putExtra("location", restaurant["name"].toString())
             startActivity(mapIntent)
         })
+
+        btnBook.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, RestaurantBookingActivity::class.java)
+            startActivity(intent)
+        })
+
+        tvAddrev.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, AddRestaurantReviewActivity::class.java)
+            intent.putExtra("restaurantName",restaurantName)
+            intent.putExtra("restaurantId",restaurantId)
+
+            startActivity(intent)
+
+        })
+
 
         if(restaurant["image"] == ""){
 
