@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import com.abencrauz.yates.models.RestaurantBooking
-import com.abencrauz.yates.models.User
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
@@ -101,7 +100,7 @@ class RestaurantBookingActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun bookRestaurant23(){
-        val date = Date(dpDate.year, dpDate.month, dpDate.dayOfMonth, tpTime.hour, tpTime.minute)
+        val date = Date(dpDate.year- 1900, dpDate.month, dpDate.dayOfMonth, tpTime.hour, tpTime.minute)
         bookRef.add(RestaurantBooking(
             restaurantId = restaurantId,
             userId = userId,
@@ -117,7 +116,7 @@ class RestaurantBookingActivity : AppCompatActivity() {
     }
 
     fun bookRestaurant21(){
-        val date = Date(dpDate.year, dpDate.month, dpDate.dayOfMonth)
+        val date = Date(dpDate.year - 1900, dpDate.month, dpDate.dayOfMonth)
         bookRef.add(RestaurantBooking(
             restaurantId = restaurantId,
             userId = userId,

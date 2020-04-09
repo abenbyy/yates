@@ -38,6 +38,7 @@ class HotelDetailActivity : AppCompatActivity() {
     private lateinit var backBtn:ImageView
 
     private lateinit var viewDealBtn:Button
+    private lateinit var viewInMapBtn:Button
     private lateinit var writeReviewBtn:Button
     private lateinit var addReview:Button
 
@@ -69,7 +70,9 @@ class HotelDetailActivity : AppCompatActivity() {
         backBtn = findViewById(R.id.back_btn)
         viewDealBtn = findViewById(R.id.view_deal_btn)
         writeReviewBtn = findViewById(R.id.write_review_btn)
+
         addReview = findViewById(R.id.add_review)
+        viewInMapBtn = findViewById(R.id.view_in_map_btn)
 
         ratingBar = findViewById(R.id.rating_bar)
         descriptionEt = findViewById(R.id.description_et)
@@ -153,6 +156,12 @@ class HotelDetailActivity : AppCompatActivity() {
                     layoutWriteReview.visibility = View.GONE
                     getReviews()
                 }
+        }
+
+        viewInMapBtn.setOnClickListener {
+            val mapIntent = Intent(this, LocationActivity::class.java)
+            mapIntent.putExtra("location", hotelName.text.toString())
+            startActivity(mapIntent)
         }
     }
 

@@ -39,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
     private var popularRestaurant:MutableList<Restaurant> = mutableListOf()
 
     private lateinit var hotelButton: Button
+    private lateinit var restaurantButton: Button
 
     companion object{
         var users = User()
@@ -87,12 +88,26 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setButtonListener(){
         hotelButton = findViewById(R.id.hotel_button)
+        restaurantButton = findViewById(R.id.restaurant_button)
         hotelButton.setOnClickListener {
             if(locationAc.text.toString() == "Where To?"){
                 locationAc.showDropDown()
                 Snackbar.make(it, "Choose the city first", Snackbar.LENGTH_LONG).show()
             }else{
                 getHotelBaseLocation()
+            }
+        }
+        restaurantButton.setOnClickListener {
+            if(locationAc.text.toString() == "Where To?"){
+                locationAc.showDropDown()
+                Snackbar.make(it, "Choose the city first", Snackbar.LENGTH_LONG).show()
+            }else{
+                val sharedPreferences = getSharedPreferences("locations",Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("location_city",locationAc.text.toString())
+                val intent = Intent(this, RestaurantActivity::class.java)
+                startActivity(intent)
+
             }
         }
     }
@@ -262,6 +277,11 @@ class HomeActivity : AppCompatActivity() {
             }
             R.id.nav_add -> {
                 val intent = Intent(this,AddPostActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(intent)
+            }
+            R.id.nav_bookings ->{
+                val intent = Intent(this, BookingsActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivity(intent)
             }

@@ -94,6 +94,7 @@ class HotelActivity : AppCompatActivity(), HotelRecycleViewAdapter.OnHotelItemCl
             hotelRecycleViewAdapter = HotelRecycleViewAdapter(this@HotelActivity)
             adapter = hotelRecycleViewAdapter
         }
+        recyclerView.isNestedScrollingEnabled = false
         addDataSet()
     }
 

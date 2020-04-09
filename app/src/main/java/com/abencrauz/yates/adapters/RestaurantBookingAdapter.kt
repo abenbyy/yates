@@ -41,8 +41,8 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
         holder.tvName.text = bookings.get(position).name
         holder.tvPerson.text = bookings.get(position).seats.toString()
         holder.tvEmail.text = bookings.get(position).email
-        val date = Date(bookings.get(position).time!!.time)
-        holder.tvTime.text = date.toString()
+//        val date = Date(bookings.get(position).time!!.time)
+//        holder.tvTime.text = date.toString()
 
 
     }

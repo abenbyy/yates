@@ -29,7 +29,9 @@ class RestaurantBookingFragment : Fragment() {
     ): View? {
         val sharedPreferences = this.activity!!.getSharedPreferences("users",Context.MODE_PRIVATE)
         userId = sharedPreferences.getString("user_id", "")
+        bookings = Vector()
 
+       // rvRbooking = view!!.findViewById(R.id.rv_rbookings)
         var q = bookRef.whereEqualTo("userId",userId)
         q.get().addOnSuccessListener { documents->
             if(documents.size()>0){

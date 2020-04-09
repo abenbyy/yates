@@ -10,4 +10,6 @@ data class Restaurant(
     var hours: String?,
     var type: String?,
     var meal: String?
-)
+){
+    constructor() : this("", "", "", "", "", "","")
+}

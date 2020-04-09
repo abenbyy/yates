@@ -57,9 +57,7 @@
         </activity>
         <activity android:name=".RestaurantDetailActivity" />
         <activity android:name=".RestaurantFilteredActivity" />
-        <activity android:name=".RestaurantActivity">
-
-        </activity>
+        <activity android:name=".RestaurantActivity" />
         <activity
             android:name=".ProfileActivity"
             android:noHistory="true"
