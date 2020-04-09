@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/hotel_image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/no_image_found"
+            android:layout_weight="0.7"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.4">
+
+            <TextView
+                android:id="@+id/hotel_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hotel name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/fontBlack"
+                />
+
+            <TextView
+                android:id="@+id/hotel_open_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open Time : "
+                android:textColor="@color/fontBlack"
+                />
+
+            <TextView
+                android:id="@+id/hotel_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hotel address"
+                />
+
+            <TextView
+                android:id="@+id/hotel_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/fontBlack"
+                android:textStyle="bold"
+                android:text="Price"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

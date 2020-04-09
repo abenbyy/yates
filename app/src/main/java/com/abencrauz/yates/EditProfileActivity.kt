@@ -1,29 +1,41 @@
 package com.abencrauz.yates
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class EditProfileActivity : AppCompatActivity() {
 
-    val db = Firebase.firestore
-    val storage = Firebase.storage
+    private val PICK_IMAGE_REQUEST: Int = 1
+    private val db = Firebase.firestore
+    private val storage = Firebase.storage.reference.child("image/")
+
+    private lateinit var profilePicture:CircleImageView
+    private lateinit var urlImageDownload:Uri
+    private lateinit var updateProfileBtn:Button
 
     var editTextList:MutableList<TextInputEditText> = mutableListOf()
     var textInputLayoutList:MutableList<TextInputLayout> = mutableListOf()
 
     var users = HomeActivity.users
+
+    lateinit var changeProfilePicture:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +44,16 @@ class EditProfileActivity : AppCompatActivity() {
         initializeTextInputEditText()
         initializeTextInputLayout()
 
-        val updateProfileBtn = findViewById<Button>(R.id.update_profile_btn)
+        updateProfileBtn = findViewById(R.id.update_profile_btn)
         val cancelUpdateBtn = findViewById<Button>(R.id.cancel_update_btn)
 
+        changeProfilePicture = findViewById(R.id.change_profile_picture)
+        profilePicture = findViewById(R.id.image_profile)
+
+        setProfilePicture()
         setTextInputEditText()
-        textChangeListener(updateProfileBtn)
-        buttonListener(cancelUpdateBtn, updateProfileBtn)
+        textChangeListener()
+        buttonListener(cancelUpdateBtn)
     }
 
     private fun initializeTextInputEditText(){
@@ -55,7 +71,7 @@ class EditProfileActivity : AppCompatActivity() {
         textInputLayoutList.add(findViewById(R.id.email_tl))
     }
 
-    private fun textChangeListener(updateProfileBtn:Button){
+    private fun textChangeListener(){
         editTextList[0].addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 updateProfileBtn.isEnabled = true
@@ -109,11 +125,9 @@ class EditProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun buttonListener(cancelUpdateBtn:Button, updateProfileBtn:Button){
+    private fun buttonListener(cancelUpdateBtn:Button){
         cancelUpdateBtn.setOnClickListener(){
-            val toProfileActivity = Intent(this, ProfileActivity::class.java)
-            toProfileActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(toProfileActivity)
+            finish()
         }
         updateProfileBtn.setOnClickListener(){
             if(validate()){
@@ -121,6 +135,33 @@ class EditProfileActivity : AppCompatActivity() {
             }else{
                 Toast.makeText(this, "Failed Update Profile", Toast.LENGTH_LONG).show()
             }
+        }
+
+        changeProfilePicture.setOnClickListener(){
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null){
+            val imageData = data.data!!
+            val imageRef = storage.child("profile-picture/${imageData.lastPathSegment.toString()}")
+            imageRef.putFile(imageData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Change Profile Picture Success", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener{
+                    Toast.makeText(this, "Failed Change Profile Picture", Toast.LENGTH_LONG).show()
+                }.addOnCompleteListener {
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        urlImageDownload = uri
+                        Picasso.get().load(uri).into(profilePicture)
+                        updateProfileBtn.isEnabled = true
+                    }
+                }
         }
     }
 
@@ -132,12 +173,19 @@ class EditProfileActivity : AppCompatActivity() {
         editTextList[4].setText(users.description)
     }
 
+    private fun setProfilePicture(){
+        val profilePicture = findViewById<CircleImageView>(R.id.image_profile)
+        if(users.image != "")
+            Picasso.get().load( Uri.parse(users.image) ).into(profilePicture)
+    }
+
     private fun setUsers(){
         users.fullname = editTextList[0].text.toString()
         users.username = editTextList[1].text.toString()
         users.password = editTextList[2].text.toString()
         users.email = editTextList[3].text.toString()
         users.description = editTextList[4].text.toString()
+        users.image = urlImageDownload.toString()
     }
 
     private fun updateProfile(updateProfileBtn: Button){
@@ -151,7 +199,8 @@ class EditProfileActivity : AppCompatActivity() {
                 "username" to users.username,
                 "password" to users.password,
                 "email" to users.email,
-                "description" to users.description
+                "description" to users.description,
+                "image" to users.image
             )
         ).addOnSuccessListener {
             Toast.makeText(this, "Success Update Profile", Toast.LENGTH_LONG).show()

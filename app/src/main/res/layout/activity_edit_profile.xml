@@ -27,8 +27,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/default_account_image"
-            app:civ_border_width="1dp"
-            app:civ_border_color="#FFFFFF"
+            app:civ_circle_background_color="@color/backWhite"
             />
         <TextView
             android:id="@+id/change_profile_picture"

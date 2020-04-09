@@ -21,25 +21,118 @@
         android:layout_above="@id/bottom_navigation"
         android:orientation="vertical">
 
-        <ImageView
+        <!--  Select Location  -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxWidth="200dp"
+                android:src="@drawable/bg_home1"
+                android:tint="#6F000000"
+                />
+
+            <!--      Auto Complete       -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/bg"
+                android:layout_alignBottom="@id/bg"
+                android:gravity="center">
+
+                <AutoCompleteTextView
+                    android:id="@+id/location_ac"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Where To?"
+                    android:background="@drawable/rounded_button"
+                    android:padding="15dp"
+                    android:enabled="false"
+                    android:textColor="@color/fontBlack"
+                    />
+
+                <ImageView
+                    android:id="@+id/dropdown_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_drop_down_blue_24dp"
+                    android:layout_alignTop="@id/location_ac"
+                    android:layout_alignRight="@id/location_ac"
+                    android:layout_alignBottom="@id/location_ac"
+                    android:layout_marginRight="5dp"
+                    />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxWidth="200dp"
-            android:src="@drawable/bg_home1"
-            android:tint="#6F000000"
-            android:layout_marginBottom="-140dp"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Where To?"
-            android:background="@drawable/rounded_button"
-            android:paddingLeft="20dp"
-            android:paddingRight="10dp"
-            android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-            />
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/hotel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hotel"
+                android:drawableTop="@drawable/ic_hotel_black_24dp"
+                android:layout_weight="0.5"
+                />
+
+            <Button
+                android:id="@+id/restaurant_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_restaurant_black_24dp"
+                android:text="Restaurant"
+                android:layout_weight="0.5"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popular Hotel"
+                android:textSize="20sp"
+                android:textColor="@color/fontBlack"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popular Restaurant"
+                android:textSize="20sp"
+                android:textColor="@color/fontBlack"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_p"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 

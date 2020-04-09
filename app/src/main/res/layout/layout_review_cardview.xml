@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/username_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                />
+
+            <RatingBar
+                android:id="@+id/rating_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.1"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:max="5"
+                android:rating="0"
+                android:isIndicator="true"
+                />
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restaurant name / Hotel name"
+                />
+
+            <TextView
+                android:id="@+id/description_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                />
+
+            <TextView
+                android:id="@+id/time_review_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time Review"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image_review"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@color/backWhite"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

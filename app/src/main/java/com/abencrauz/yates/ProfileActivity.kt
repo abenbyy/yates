@@ -1,53 +1,72 @@
 package com.abencrauz.yates
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import com.abencrauz.yates.adapter.ViewPagerTabAdapter
+import com.abencrauz.yates.tab_fragments.PostFragment
+import com.abencrauz.yates.tab_fragments.ReviewFragment
+import com.google.android.material.tabs.TabLayout
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : Fragment() {
 
     var users = HomeActivity.users
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+    lateinit var v:View
 
-        initializeBottomNavigationMenu()
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        v = inflater.inflate(R.layout.activity_profile, container, false)
+        initializeTab()
         setTextView()
+        setProfilePicture()
         buttonListener()
+        return v
     }
 
-    private fun initializeBottomNavigationMenu(){
-        var bottomNavigationMenu = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationMenu.selectedItemId = R.id.nav_profile
+    private fun initializeTab(){
+        tabLayout = v.findViewById(R.id.tab_layout)
+        viewPager = v.findViewById(R.id.view_pager)
 
-        bottomNavigationMenu.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-    }
+        val fragmentAdapter = ViewPagerTabAdapter(childFragmentManager)
+        viewPager.adapter = fragmentAdapter
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when(item.itemId){
-            R.id.nav_home -> {
-                val intent = Intent(this,HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                startActivity(intent)
-            }
-        }
-        false
+        fragmentAdapter.addFragment(PostFragment(HomeActivity.listUserPost))
+        fragmentAdapter.addFragment(ReviewFragment(HomeActivity.listUserReview))
+
+        tabLayout.setupWithViewPager(viewPager)
+
+        tabLayout.getTabAt(0)?.text = "Post"
+        tabLayout.getTabAt(1)?.text = "Review"
+
     }
 
     private fun setTextView(){
-        findViewById<TextView>(R.id.username_tv).text = users.username
-        findViewById<TextView>(R.id.fullname_tv).text = users.fullname
-        findViewById<TextView>(R.id.description_tv).text = users.description
+        v.findViewById<TextView>(R.id.username_tv).text = users.username
+        v.findViewById<TextView>(R.id.fullname_tv).text = users.fullname
+        v.findViewById<TextView>(R.id.description_tv).text = users.description
+    }
+
+    private fun setProfilePicture(){
+        val profilePicture = v.findViewById<CircleImageView>(R.id.image_profile)
+        if(users.image != "")
+            Picasso.get().load( Uri.parse(users.image) ).into(profilePicture)
     }
 
     private fun buttonListener(){
-        findViewById<Button>(R.id.edit_profile_btn).setOnClickListener(){
-            var toEditProfile = Intent(this, EditProfileActivity::class.java)
+        v.findViewById<Button>(R.id.edit_profile_btn).setOnClickListener(){
+            var toEditProfile = Intent(v.context, EditProfileActivity::class.java)
             toEditProfile.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(toEditProfile)
         }
@@ -56,11 +75,13 @@ class ProfileActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setTextView()
+        setProfilePicture()
     }
 
     override fun onResume() {
         super.onResume()
         setTextView()
+        setProfilePicture()
     }
 
 }

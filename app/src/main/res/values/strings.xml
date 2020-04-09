@@ -22,5 +22,8 @@
     <string name="password_invalid">Password must be alphanumeric</string>
     <string name="username_exist">Username already exist</string>
     <string name="register_succes">Register Success!</string>
+    <string name="post">Post</string>
+    <string name="review">Review</string>
+    <string name="location">Location</string>
 
 </resources>
