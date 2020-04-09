@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.ImageView
+import android.view.View
+import android.widget.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.abencrauz.yates.adapter.PopularHotelRecycleViewAdapter
+import com.abencrauz.yates.adapter.PopularRestaurantRecycleViewAdapter
 import com.abencrauz.yates.adapter.PostRecycleViewAdapter
 import com.abencrauz.yates.models.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,13 +34,19 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var dropDownBtn: ImageView
     private var listPostBaseCity:MutableList<UserPost> = mutableListOf()
 
-    lateinit var postRecycleViewAdapter: PostRecycleViewAdapter
+    private lateinit var postRecycleViewAdapter: PostRecycleViewAdapter
+    private lateinit var popularHotelRecycleViewAdapter: PopularHotelRecycleViewAdapter
+    private lateinit var popularRestaurantRecycleViewAdapter: PopularRestaurantRecycleViewAdapter
 
     private var popularHotel:MutableList<Hotel> = mutableListOf()
     private var popularRestaurant:MutableList<Restaurant> = mutableListOf()
 
     private lateinit var hotelButton: Button
     private lateinit var restaurantButton: Button
+
+    private lateinit var userPostLayout:LinearLayout
+    private lateinit var popularRestaurantLayout: LinearLayout
+    private lateinit var popularHotelLayout: LinearLayout
 
     companion object{
         var users = User()
@@ -51,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
         var listCityName:MutableList<String> = mutableListOf()
 
         var listHotel:MutableList<Hotel> = mutableListOf()
+
         var listHotelBaseLocation:MutableList<Hotel> = mutableListOf()
 
         var listRestaurant:MutableList<Restaurant> = mutableListOf()
@@ -68,6 +76,14 @@ class HomeActivity : AppCompatActivity() {
 
         locationAc = findViewById(R.id.location_ac)
 
+        popularHotelLayout = findViewById(R.id.popular_hotel_layout)
+        popularRestaurantLayout = findViewById(R.id.popular_restaurant_layout)
+        userPostLayout = findViewById(R.id.user_post_layout)
+
+        popularHotelLayout.visibility = View.GONE
+        popularRestaurantLayout.visibility = View.GONE
+        userPostLayout.visibility = View.GONE
+
         getAllCity()
         getAllHotel()
         getAllRestaurant()
@@ -78,6 +94,8 @@ class HomeActivity : AppCompatActivity() {
 
         setButtonListener()
         setAdapterPost()
+        setAdapterPopularHotel()
+        setAdapterPopularRestaurant()
         subscribeMessage()
     }
 
@@ -107,7 +125,6 @@ class HomeActivity : AppCompatActivity() {
                 editor.putString("location_city",locationAc.text.toString())
                 val intent = Intent(this, RestaurantActivity::class.java)
                 startActivity(intent)
-
             }
         }
     }
@@ -175,6 +192,8 @@ class HomeActivity : AppCompatActivity() {
                     editor.putString("location_city", locationAc.text.toString())
                     editor.commit()
                     getPostBaseOnCity()
+                    getPopularHotel()
+                    getPopularRestaurant()
                 }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -257,8 +276,93 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getPopularHotel(){
-        if(popularHotel.isNotEmpty())
+        if(popularHotel.isNotEmpty()){
             popularHotel.clear()
+            addDataSetHotel()
+        }
+
+        db.collection("user-reviews")
+            .whereGreaterThanOrEqualTo("rating",4)
+            .orderBy("rating", Query.Direction.DESCENDING)
+            .get().addOnSuccessListener { documents ->
+                for (document in documents){
+                    if(popularHotel.size == 5){
+                        break
+                    }
+                    if(document.data["hotelId"].toString() != "")
+                        db.collection("hotels").document(document.data["hotelId"].toString())
+                            .get()
+                            .addOnSuccessListener { doc ->
+                                var add = true
+                                for( j in popularHotel ){
+                                    if(j.name == doc["name"].toString()){
+                                        add = false
+                                        break
+                                    }
+                                }
+                                if(add){
+                                    var i = Hotel(
+                                        doc["name"].toString(),
+                                        doc["address"].toString(),
+                                        doc["countryId"].toString().toInt(),
+                                        doc["latitude"].toString().toDouble(),
+                                        doc["longitude"].toString().toDouble(),
+                                        doc["image"].toString(),
+                                        doc["type"].toString(),
+                                        doc["phoneNumber"].toString(),
+                                        doc["openTime"].toString(),
+                                        doc["price"].toString().toInt()
+                                    )
+                                    popularHotel.add(i)
+                                    addDataSetHotel()
+                                }
+                            }
+                }
+            }
+    }
+
+    private fun getPopularRestaurant(){
+        if(popularRestaurant.isNotEmpty()){
+            popularRestaurant.clear()
+            addDataSetRestaurant()
+        }
+
+        db.collection("user-reviews")
+            .whereGreaterThanOrEqualTo("rating",4)
+            .orderBy("rating", Query.Direction.DESCENDING)
+            .get().addOnSuccessListener { documents ->
+                for (document in documents){
+                    if(popularRestaurant.size == 5)
+                        break
+                    if(document.data["restaurantId"].toString() != "")
+                        db.collection("restaurants").document(document.data["restaurantId"].toString())
+                            .get()
+                            .addOnSuccessListener { doc ->
+                                if(doc["location"].toString() == locationAc.text.toString().trim()){
+                                    var add = true
+                                    for ( i in popularRestaurant){
+                                        if(doc["name"].toString() == i.name) {
+                                            add = false
+                                            break
+                                        }
+                                    }
+                                    if(add){
+                                        var i = Restaurant(
+                                            doc["name"].toString(),
+                                            doc["location"].toString(),
+                                            doc["image"].toString(),
+                                            doc["address"].toString(),
+                                            doc["hours"].toString(),
+                                            doc["type"].toString(),
+                                            doc["meal"].toString()
+                                        )
+                                        popularRestaurant.add(i)
+                                        addDataSetRestaurant()
+                                    }
+                                }
+                            }
+                }
+            }
     }
 
     private fun initializeBottomNavigationMenu(){
@@ -338,9 +442,56 @@ class HomeActivity : AppCompatActivity() {
         addDataSet()
     }
 
+    private fun setAdapterPopularHotel(){
+        var recyclerViewHotel = findViewById<RecyclerView>(R.id.popular_hotel_rv)
+
+        recyclerViewHotel.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            popularHotelRecycleViewAdapter = PopularHotelRecycleViewAdapter()
+            adapter = popularHotelRecycleViewAdapter
+        }
+        addDataSetHotel()
+    }
+
+    private fun setAdapterPopularRestaurant(){
+        var recyclerViewRestaurant = findViewById<RecyclerView>(R.id.popular_restaurant_rv)
+
+        recyclerViewRestaurant.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            popularRestaurantRecycleViewAdapter = PopularRestaurantRecycleViewAdapter()
+            adapter = popularRestaurantRecycleViewAdapter
+        }
+        addDataSetRestaurant()
+    }
+
     private fun addDataSet(){
+        if(listPostBaseCity.size != 0){
+            userPostLayout.visibility = View.VISIBLE
+        }else{
+            userPostLayout.visibility = View.GONE
+        }
         postRecycleViewAdapter.submitList(listPostBaseCity)
         postRecycleViewAdapter.notifyDataSetChanged()
+    }
+
+    private fun addDataSetHotel(){
+        if(popularHotel.size != 0){
+            popularHotelLayout.visibility = View.VISIBLE
+        }else{
+            popularHotelLayout.visibility = View.GONE
+        }
+        popularHotelRecycleViewAdapter.submitList(popularHotel)
+        popularHotelRecycleViewAdapter.notifyDataSetChanged()
+    }
+
+    private fun addDataSetRestaurant(){
+        if(popularRestaurant.size != 0){
+            popularRestaurantLayout.visibility = View.VISIBLE
+        }else{
+            popularRestaurantLayout.visibility = View.GONE
+        }
+        popularRestaurantRecycleViewAdapter.submitList(popularRestaurant)
+        popularRestaurantRecycleViewAdapter.notifyDataSetChanged()
     }
 
 }
