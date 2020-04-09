@@ -45,7 +45,14 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        mGoogleSignInClient.signOut()
+        //mGoogleSignInClient.signOut()
+        val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", "")
+        Log.d("Logged in", userId)
+        if(userId != ""){
+            val intent = Intent(this, RestaurantActivity::class.java)
+            startActivity(intent)
+        }
         initComponent()
 
 
@@ -62,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString("user_id", document.id)
                             editor.commit()
 
-                            val intent = Intent(this, HomeActivity::class.java)
+                            val intent = Intent(this, RestaurantActivity::class.java)
                             startActivity(intent)
                         }
 
@@ -120,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
                         editor.commit()
                         var message = getString(R.string.welcome)+", "+ user["fullname"].toString()
                         Toast.makeText(this,message, Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, HomeActivity::class.java)
+                        val intent = Intent(this, RestaurantActivity::class.java)
                         startActivity(intent)
                     }
                 }else{
@@ -170,7 +177,7 @@ class LoginActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.putString("user_id", document.id)
                         editor.commit()
-                        val intent = Intent(this, HomeActivity::class.java)
+                        val intent = Intent(this, RestaurantActivity::class.java)
                         startActivity(intent)
                     }
                 }else{
