@@ -48,7 +48,7 @@ class RestaurantAdapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
        }
 
         holder.tvName.text = restaurants.get(position).name
-        holder.tvMeal.text = restaurants.get(position).type
+        holder.tvType.text = restaurants.get(position).type
         holder.tvMeal.text = restaurants.get(position).meal
 
         holder.cvRestaurant.setOnClickListener(View.OnClickListener {

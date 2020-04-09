@@ -53,7 +53,17 @@
     <string name="add_image">Add Image</string>
     <string name="add_review">Add Review</string>
 
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="restaurant_address">Restaurant Address</string>
+    <string name="restraurant_hours">Open Hours (ex. 09.00 AM - 10.00PM)</string>
+    <string name="restaurant_location">Restaurant Location</string>
+    <string name="restaurant_meal">Restaurant Meal</string>
+    <string name="restaurant_type">Restaurant Type</string>
+
+    <string name="persons">Person(s)</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
+

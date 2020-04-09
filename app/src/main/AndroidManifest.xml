@@ -34,15 +34,13 @@
         <activity
             android:name=".LocationActivity"
             android:label="@string/title_activity_restaurant_location" />
-        <activity android:name=".AddRestaurantActivity" />
+        <activity android:name=".AddRestaurantActivity">
+
+        </activity>
         <activity android:name=".RestaurantDetailActivity" />
         <activity android:name=".RestaurantFilteredActivity" />
         <activity android:name=".RestaurantActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ProfileActivity"
@@ -55,7 +53,13 @@
             android:label="@string/edit_profile" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

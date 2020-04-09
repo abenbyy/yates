@@ -156,6 +156,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
         btnBook.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, RestaurantBookingActivity::class.java)
+            intent.putExtra("restaurantId",restaurantId)
+            intent.putExtra("restaurantName",restaurantName)
             startActivity(intent)
         })
 

@@ -1,5 +1,6 @@
 package com.abencrauz.yates
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,7 @@ import com.abencrauz.yates.adapters.RestaurantAdapter
 import com.abencrauz.yates.adapters.RestaurantFilterAdapter
 import com.abencrauz.yates.models.Restaurant
 import com.abencrauz.yates.models.RestaurantFilter
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -33,16 +35,20 @@ class RestaurantActivity : AppCompatActivity() {
 
     private lateinit var pb: ProgressBar
 
+    private lateinit var btnAdd: MaterialButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant)
 
+        btnAdd = findViewById(R.id.btn_add)
         restaurantAdapter = RestaurantAdapter(this)
         rvRestaurant = findViewById(R.id.rv_restaurant)
         rvRestaurant.apply {
             layoutManager = GridLayoutManager(this@RestaurantActivity,1) as RecyclerView.LayoutManager?
             adapter = restaurantAdapter
         }
+        rvRestaurant.isNestedScrollingEnabled = false
         restaurants = Vector()
         rType = Vector()
         rMeal = Vector()
@@ -51,6 +57,10 @@ class RestaurantActivity : AppCompatActivity() {
         toggleLoad(true)
         initFilters()
         initFilterAdapter()
+        btnAdd.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, AddRestaurantActivity::class.java)
+            startActivity(intent)
+        })
 
     }
 
