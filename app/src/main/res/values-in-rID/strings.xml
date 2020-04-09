@@ -54,4 +54,5 @@
     <string name="restaurant_type">Tipe Restoran</string>
     <string name="persons">Orang</string>
     <string name="hello_blank_fragment">Hai fragment kosong</string>
+    <string name="nights">Malam</string>
 </resources>
