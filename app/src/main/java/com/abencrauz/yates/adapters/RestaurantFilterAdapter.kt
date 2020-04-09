@@ -42,8 +42,8 @@ class RestaurantFilterAdapter: RecyclerView.Adapter<RestaurantFilterAdapter.View
                 intent.putExtra("type",filters.get(position).name)
                 intent.putExtra("meal","")
             }else if(filters.get(position).type.equals("Meal")){
-                intent.putExtra("type",filters.get(position).name)
-                intent.putExtra("meal","")
+                intent.putExtra("meal",filters.get(position).name)
+                intent.putExtra("type","")
             }
             context.startActivity(intent)
         })

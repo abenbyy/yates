@@ -1,6 +1,6 @@
 package com.abencrauz.yates.models
 
-import java.sql.Timestamp
+import com.google.firebase.Timestamp
 import java.util.*
 
 data class RestaurantBooking(

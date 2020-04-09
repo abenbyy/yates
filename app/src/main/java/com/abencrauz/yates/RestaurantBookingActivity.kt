@@ -15,7 +15,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.sql.Timestamp
+import com.google.firebase.Timestamp
 import java.util.*
 
 class RestaurantBookingActivity : AppCompatActivity() {
@@ -107,7 +107,7 @@ class RestaurantBookingActivity : AppCompatActivity() {
             name = etName.text.toString(),
             email = etEmail.text.toString(),
             seats = etSeats.text.toString().toInt(),
-            time = Timestamp(date.time)
+            time = Timestamp(date)
         )).addOnSuccessListener {
             Toast.makeText(this, "Success!!", Toast.LENGTH_LONG)
             Log.d("Booked","via 23 API")
@@ -123,7 +123,7 @@ class RestaurantBookingActivity : AppCompatActivity() {
             name = etName.text.toString(),
             email = etEmail.text.toString(),
             seats = etSeats.text.toString().toInt(),
-            time = Timestamp(date.time)
+            time = Timestamp(date)
         ))
             .addOnSuccessListener {
                 Toast.makeText(this, "Success!!", Toast.LENGTH_LONG)

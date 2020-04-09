@@ -21,6 +21,7 @@ class RestaurantBookingFragment : Fragment() {
     private var bookRef = db.collection("restaurant-bookings")
     private lateinit var rvRbooking: RecyclerView
     private lateinit var bookings: Vector<RestaurantBooking>
+    private lateinit var ids: Vector<String>
     private lateinit var rvAdapter: RestaurantBookingAdapter
     private var userId: String? = ""
     override fun onCreateView(
@@ -30,14 +31,21 @@ class RestaurantBookingFragment : Fragment() {
         val sharedPreferences = this.activity!!.getSharedPreferences("users",Context.MODE_PRIVATE)
         userId = sharedPreferences.getString("user_id", "")
         bookings = Vector()
+        ids = Vector()
+        val v = inflater.inflate(R.layout.fragment_restaurant_booking, container, false)
 
-       // rvRbooking = view!!.findViewById(R.id.rv_rbookings)
+        rvRbooking = v.findViewById(R.id.rv_rbookings)
+        rvAdapter = RestaurantBookingAdapter(v.context)
         var q = bookRef.whereEqualTo("userId",userId)
         q.get().addOnSuccessListener { documents->
             if(documents.size()>0){
                 for(document in documents){
                     bookings.add(document.toObject<RestaurantBooking>())
+                    ids.add(document.id)
                 }
+                rvAdapter.setBooking(bookings)
+                rvAdapter.setIds(ids)
+                rvAdapter.notifyDataSetChanged()
             }
 
             rvAdapter = RestaurantBookingAdapter(this.context!!)
@@ -47,13 +55,17 @@ class RestaurantBookingFragment : Fragment() {
             }
 
             rvAdapter.setBooking(bookings)
+            rvAdapter.setIds(ids)
             rvAdapter.notifyDataSetChanged()
-
-
 
         }
 
-        return inflater.inflate(R.layout.fragment_restaurant_booking, container, false)
+        return v
+    }
+
+    override fun onStart() {
+        super.onStart()
+        rvAdapter.notifyDataSetChanged()
     }
 
    

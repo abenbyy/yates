@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.R
 import com.abencrauz.yates.models.RestaurantBooking
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.item_restaurant_booking.view.*
@@ -16,14 +17,19 @@ import java.util.*
 class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.ViewHolder> {
     private var db = Firebase.firestore
     private var resRef = db.collection("restaurants")
+    private var bookRef = db.collection("restaurant-bookings")
     private var context:Context
     private lateinit var bookings:Vector<RestaurantBooking>
+    private lateinit var ids: Vector<String>
 
     constructor(context: Context){
         this.context = context
     }
     fun setBooking(bookings:Vector<RestaurantBooking>){
         this.bookings = bookings
+    }
+    fun setIds(ids:Vector<String>){
+        this.ids = ids
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
@@ -41,8 +47,17 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
         holder.tvName.text = bookings.get(position).name
         holder.tvPerson.text = bookings.get(position).seats.toString()
         holder.tvEmail.text = bookings.get(position).email
-//        val date = Date(bookings.get(position).time!!.time)
-//        holder.tvTime.text = date.toString()
+        val dt = bookings.get(position).time!!.toDate()
+        holder.tvTime.text = dt.toString()
+
+        holder.btnCancel.setOnClickListener(View.OnClickListener {
+            bookRef.document(ids.get(position))
+                .delete().addOnSuccessListener {
+                    bookings.removeAt(position)
+                    ids.removeAt(position)
+                    this.notifyDataSetChanged()
+                }
+        })
 
 
     }
@@ -53,6 +68,7 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
         var tvEmail:TextView
         var tvPerson:TextView
         var tvTime:TextView
+        var btnCancel: MaterialButton
         constructor(view: View):super(view){
             tvRestaurant = view.findViewById(R.id.tv_restaurant)
             tvName = view.findViewById(R.id.tv_name)
@@ -60,7 +76,7 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
             tvPerson = view.findViewById(R.id.tv_person)
             tvTime = view.findViewById(R.id.tv_time)
 
-
+            btnCancel = view.findViewById(R.id.btn_cancel)
         }
     }
 }
