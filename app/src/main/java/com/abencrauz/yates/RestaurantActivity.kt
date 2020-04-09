@@ -43,9 +43,9 @@ class RestaurantActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant)
-        val sharedPreferences = getSharedPreferences("location_city",Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("locations",Context.MODE_PRIVATE)
         location = sharedPreferences.getString("location_city","").toString()
-
+        if(location == "") finish()
         btnAdd = findViewById(R.id.btn_add)
         restaurantAdapter = RestaurantAdapter(this)
         rvRestaurant = findViewById(R.id.rv_restaurant)
