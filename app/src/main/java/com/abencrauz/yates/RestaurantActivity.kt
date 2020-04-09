@@ -1,5 +1,6 @@
 package com.abencrauz.yates
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,6 +25,8 @@ class RestaurantActivity : AppCompatActivity() {
     private lateinit var rvRestaurant: RecyclerView
     private lateinit var restaurants : Vector<Restaurant>
 
+    private lateinit var location: String
+
     private lateinit var rType: Vector<RestaurantFilter>
     private lateinit var rMeal: Vector<RestaurantFilter>
 
@@ -40,6 +43,8 @@ class RestaurantActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant)
+        val sharedPreferences = getSharedPreferences("location_city",Context.MODE_PRIVATE)
+        location = sharedPreferences.getString("location_city","").toString()
 
         btnAdd = findViewById(R.id.btn_add)
         restaurantAdapter = RestaurantAdapter(this)
@@ -69,7 +74,7 @@ class RestaurantActivity : AppCompatActivity() {
         toggleLoad(true)
         var query = restRef.limit(10)
         restaurants = Vector()
-        restRef.get()
+        restRef.whereEqualTo("location",location).get()
             .addOnSuccessListener { documents->
                 if(documents.size()>0){
                     for(document in documents){
