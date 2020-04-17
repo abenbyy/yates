@@ -118,11 +118,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Popular Hotel"
+                        android:text="@string/popular_hotel"
                         android:textSize="20sp"
                         android:textColor="@color/primaryBlue"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -144,11 +145,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Popular Restaurant"
+                        android:text="@string/popular_restaurant"
                         android:textSize="20sp"
                         android:textColor="@color/primaryBlue"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -169,11 +171,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Post"
+                        android:text="@string/post"
                         android:textSize="20sp"
                         android:textColor="@color/primaryBlue"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         />
 
                     <androidx.recyclerview.widget.RecyclerView

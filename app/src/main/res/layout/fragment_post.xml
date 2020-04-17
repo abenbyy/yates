@@ -3,14 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".tab_fragments.PostFragment">
+    tools:context=".tab_fragments.PostFragment"
+    android:orientation="vertical">
 
     <!--  Recycle View  -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/no_post_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_post"
+        android:textSize="30sp"
+        android:gravity="center"
+        />
 
 </LinearLayout>

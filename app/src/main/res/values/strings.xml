@@ -68,6 +68,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nights">Night(s)</string>
+    <string name="new_post">New Post</string>
+    <string name="share">SHARE</string>
+    <string name="popular_restaurant">Popular Restaurant</string>
+    <string name="popular_hotel">Popular Hotel</string>
+    <string name="no_post">NO POST</string>
+    <string name="no_review">NO REVIEW</string>
 
 </resources>
 

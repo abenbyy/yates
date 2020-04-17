@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.adapter.PopularHotelRecycleViewAdapter
@@ -154,6 +153,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getAllCity(){
+        if(listCity.isNotEmpty()){
+            listCity.clear()
+            listCityName.clear()
+        }
         db.collection("cities")
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -217,6 +220,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getAllHotel(){
+        if(listHotel.isNotEmpty())
+            listHotel.clear()
         db.collection("hotels")
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -226,6 +231,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getAllRestaurant(){
+        if (listRestaurant.isNotEmpty()){
+            listRestaurantId.clear()
+            listRestaurant.clear()
+        }
         db.collection("restaurants")
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -434,7 +443,7 @@ class HomeActivity : AppCompatActivity() {
         var recyclerView = findViewById<RecyclerView>(R.id.recycler_view_p)
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
+            layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
             postRecycleViewAdapter = PostRecycleViewAdapter()
             adapter = postRecycleViewAdapter
         }
@@ -446,7 +455,7 @@ class HomeActivity : AppCompatActivity() {
         var recyclerViewHotel = findViewById<RecyclerView>(R.id.popular_hotel_rv)
 
         recyclerViewHotel.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
+            layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
             popularHotelRecycleViewAdapter = PopularHotelRecycleViewAdapter()
             adapter = popularHotelRecycleViewAdapter
         }
@@ -457,7 +466,7 @@ class HomeActivity : AppCompatActivity() {
         var recyclerViewRestaurant = findViewById<RecyclerView>(R.id.popular_restaurant_rv)
 
         recyclerViewRestaurant.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
+            layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
             popularRestaurantRecycleViewAdapter = PopularRestaurantRecycleViewAdapter()
             adapter = popularRestaurantRecycleViewAdapter
         }

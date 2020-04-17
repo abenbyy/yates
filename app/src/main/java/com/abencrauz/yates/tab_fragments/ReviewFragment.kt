@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -18,6 +19,9 @@ class ReviewFragment() : Fragment() {
 
     lateinit var reviewRecycleViewAdapter:ReviewRecycleViewAdapter
 
+    lateinit var recyclerView: RecyclerView
+    lateinit var noReviewTextView: TextView
+
     constructor(listReview : MutableList<UserReview>) : this() {
         this@ReviewFragment.listReview = listReview
     }
@@ -25,7 +29,8 @@ class ReviewFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v = inflater.inflate(R.layout.fragment_review, container, false)
 
-        var recyclerView = v.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = v.findViewById(R.id.recycler_view)
+        noReviewTextView = v.findViewById(R.id.no_review_tv)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(v.context)
@@ -39,6 +44,13 @@ class ReviewFragment() : Fragment() {
     }
 
     private fun addDataSet(){
+        if(listReview.isEmpty()){
+            recyclerView.visibility = View.GONE
+            noReviewTextView.visibility = View.VISIBLE
+        }else{
+            noReviewTextView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
         reviewRecycleViewAdapter.submitList(listReview)
         reviewRecycleViewAdapter.notifyDataSetChanged()
     }

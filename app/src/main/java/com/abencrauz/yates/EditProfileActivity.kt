@@ -185,7 +185,12 @@ class EditProfileActivity : AppCompatActivity() {
         users.password = editTextList[2].text.toString()
         users.email = editTextList[3].text.toString()
         users.description = editTextList[4].text.toString()
-        users.image = urlImageDownload.toString()
+        val ui = users.image
+        try {
+            users.image = urlImageDownload.toString()
+        }catch(e: Exception){
+            users.image = ui
+        }
     }
 
     private fun updateProfile(updateProfileBtn: Button){

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,6 +18,8 @@ class PostFragment() : Fragment() {
     lateinit var listPost:MutableList<UserPost>
 
     lateinit var postRecycleViewAdapter: PostRecycleViewAdapter
+    lateinit var recyclerView: RecyclerView
+    lateinit var noPostTextView:TextView
 
     constructor(listPost : MutableList<UserPost>) : this() {
         this@PostFragment.listPost = listPost
@@ -25,7 +28,8 @@ class PostFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v = inflater.inflate(R.layout.fragment_post, container, false)
 
-        var recyclerView = v.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = v.findViewById(R.id.recycler_view)
+        noPostTextView = v.findViewById(R.id.no_post_tv)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(v.context)
@@ -39,6 +43,13 @@ class PostFragment() : Fragment() {
     }
 
     private fun addDataSet(){
+        if(listPost.isEmpty()){
+            recyclerView.visibility = View.GONE
+            noPostTextView.visibility = View.VISIBLE
+        }else{
+            noPostTextView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
         postRecycleViewAdapter.submitList(listPost)
         postRecycleViewAdapter.notifyDataSetChanged()
     }

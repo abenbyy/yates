@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_post_cardview.view.*
+import java.lang.Exception
 
 class PostRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -46,18 +47,28 @@ class PostRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val cityTv = itemView.city_tv
         private val timePostTv = itemView.time_post_tv
         private val locationTvShow = itemView.location_tv_show
+        private val loadingImage = itemView.loading_image
 
         private val db = Firebase.firestore
 
         private val userRef = db.collection("users")
 
         fun bind(userPost : UserPost){
-            Picasso.get().load(Uri.parse(userPost.image)).into(imagePost)
+            locationTvShow.visibility = View.GONE
 
+            Picasso.get().load(Uri.parse(userPost.image)).resize(1000,800).centerCrop().into(imagePost, object: com.squareup.picasso.Callback{
+                override fun onSuccess() {
+                    imagePost.visibility = View.VISIBLE
+                    loadingImage.visibility = View.GONE
+                }
+
+                override fun onError(e: Exception?) {
+                }
+            })
+            locationTvShow.visibility = View.GONE
             userRef.document(userPost.userId).get().addOnSuccessListener { document ->
                 usernameTv.text = document.data?.get("username").toString()
             }
-
 
             if(userPost.locationId != ""){
                 locationTvShow.visibility = View.VISIBLE
@@ -69,7 +80,6 @@ class PostRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
             }else{
                 cityTv.text = ""
-                locationTvShow.visibility = View.GONE
             }
 
             descriptionTv.text = userPost.description

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 import java.util.*
 
 class AddPostActivity : AppCompatActivity() {
@@ -40,10 +41,17 @@ class AddPostActivity : AppCompatActivity() {
 
     private lateinit var locationAc:AutoCompleteTextView
     private lateinit var dropDownBtn:ImageView
+    private lateinit var loadingImage:ProgressBar
+
+    companion object{
+        lateinit var addPostActivity: AddPostActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_post)
+
+        addPostActivity = this
 
         initialize()
         initDropDown()
@@ -60,20 +68,30 @@ class AddPostActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null){
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val imageData = data.data!!
             val imageRef = storageRef.child(uuid)
             imageRef.putFile(imageData)
                 .addOnSuccessListener {
                     Log.e("Success Image", uuid)
-                }.addOnFailureListener{
+                }.addOnFailureListener {
                     Log.e("Fail Image", uuid)
                 }.addOnCompleteListener {
                     imageRef.downloadUrl.addOnSuccessListener { uri ->
                         urlImageDownload = uri
-                        Picasso.get().load(uri).into(imagePost)
+                        Picasso.get().load(uri).resize(100,100).centerCrop().into(imagePost, object: com.squareup.picasso.Callback{
+                            override fun onSuccess() {
+                                imagePost.visibility = View.VISIBLE
+                                loadingImage.visibility = View.GONE
+                            }
+
+                            override fun onError(e: Exception?) {
+                            }
+                        })
                     }
                 }
+        } else {
+            addPostActivity.intentToHome()
         }
     }
 
@@ -83,6 +101,8 @@ class AddPostActivity : AppCompatActivity() {
         descriptionET = findViewById(R.id.description_et)
         imagePost = findViewById(R.id.image_post)
         progressBar = findViewById(R.id.progress_bar)
+        loadingImage = findViewById(R.id.loading_image)
+        imagePost.visibility = View.GONE
         uuid = UUID.randomUUID().toString()
         locationId = ""
     }
@@ -108,13 +128,16 @@ class AddPostActivity : AppCompatActivity() {
             }
         }
         shareBtn.setOnClickListener(){
+            val idx = HomeActivity.listCityName.indexOf(locationAc.text.toString())
             progressBar.visibility = View.VISIBLE
             clickOnce++
             if(clickOnce == 1) {
                 val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
                 val userId = sharedPreferences.getString("user_id", "")
-                val idx = HomeActivity.listCityName.indexOf(locationAc.text.toString())
-                locationId = HomeActivity.listCity[idx].cityId
+                if(idx!=-1)
+                    locationId = HomeActivity.listCity[idx].cityId
+                else
+                    locationId = ""
                 val userPost = UserPost(
                     userId!!,
                     urlImageDownload.toString(),

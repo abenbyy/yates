@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Post"
+                android:text="@string/new_post"
                 android:textSize="20sp"
                 android:textColor="@color/fontBlack"
                 android:textStyle="bold"
@@ -59,7 +59,7 @@
                 android:id="@+id/share_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SHARE"
+                android:text="@string/share"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -81,6 +81,15 @@
             android:layout_height="100dp"
             android:layout_margin="20dp"
             android:src="@drawable/ic_add_a_photo_grey_24dp"
+            android:visibility="gone"
+            />
+
+        <ProgressBar
+            android:id="@+id/loading_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:progressTint="@color/primaryBlue"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -89,24 +98,20 @@
             app:counterEnabled="true"
             app:counterMaxLength="500"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            >
+            android:layout_marginRight="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/description_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:height="150dp"
-                android:inputType="textMultiLine"
-                android:background="?android:windowBackground"
+                android:height="100dp"
                 android:gravity="top"
-                android:textSize="12sp"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
                 android:scrollbars="vertical"
-                android:hint="Add description"
-                />
+                android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
 
     <RelativeLayout
