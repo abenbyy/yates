@@ -139,9 +139,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_price"
+            android:textColor="@color/fontBlack"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="0.4"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:id="@+id/total_price_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fontBlack"
+            android:textSize="20sp"
+            android:text="IDR 100000"
+            android:layout_weight="0.2"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <Button
             android:id="@+id/book_btn"

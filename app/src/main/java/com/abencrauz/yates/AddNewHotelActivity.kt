@@ -4,36 +4,34 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.abencrauz.yates.models.Hotel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_add_new_hotel.*
 import java.util.*
 
 class AddNewHotelActivity : AppCompatActivity() {
 
     private lateinit var hotelName:TextInputEditText
     private lateinit var hotelAddress:TextInputEditText
-    private lateinit var hotelType:TextInputEditText
-    private lateinit var openTime:TextInputEditText
-    private lateinit var amPm:TextInputEditText
+    private lateinit var hotelType:AutoCompleteTextView
+    private lateinit var openTime:TimePicker
     private lateinit var hotelPrice:TextInputEditText
-    private lateinit var longitude:TextInputEditText
-    private lateinit var latitude:TextInputEditText
     private lateinit var hotelPhoneNumber:TextInputEditText
     private lateinit var location:TextView
     private lateinit var addBtn:Button
-    private lateinit var backBtn:ImageView
     private lateinit var imageHotel:ImageView
+
+    val types = mutableListOf("Hotel","Villa","Resort")
 
     private var urlImageDownload:Uri = Uri.parse("http://www.google.com")
 
@@ -41,6 +39,8 @@ class AddNewHotelActivity : AppCompatActivity() {
     private val storageRef = Firebase.storage.reference.child("hotel-picture")
     private val PICK_IMAGE_REQUEST = 1
     private val uuid = UUID.randomUUID().toString()
+
+    private lateinit var progressBar:ProgressBar
 
     private var addHotel = false
 
@@ -55,7 +55,13 @@ class AddNewHotelActivity : AppCompatActivity() {
         value = sharedPreferences.getString("location_city", "").toString()
 
         initialize()
+        initializeAutoComplete()
         initializeButton()
+    }
+
+    private fun initializeAutoComplete(){
+        val adapter2 = ArrayAdapter(this, R.layout.dropdown_item, types)
+        hotelType.setAdapter(adapter2)
     }
 
     private fun getPicture(){
@@ -86,7 +92,6 @@ class AddNewHotelActivity : AppCompatActivity() {
 
     private fun initializeButton(){
         addBtn = findViewById(R.id.add_btn)
-        backBtn = findViewById(R.id.back_btn)
 
         addBtn.setOnClickListener {
             if(checkHotelName()){
@@ -95,52 +100,70 @@ class AddNewHotelActivity : AppCompatActivity() {
                 Toast.makeText(this, "Hotel address must be filled", Toast.LENGTH_LONG).show()
             }else if(!checkHotelType()){
                 Toast.makeText(this, "Hotel type must be either Hotel or Villa or Resort", Toast.LENGTH_LONG).show()
-            }else if(checkOpenTime()){
-                Toast.makeText(this, "Hotel open time must be filled", Toast.LENGTH_LONG).show()
-            }else if(!checkAMPM()){
-                Toast.makeText(this, " AM or PM must be specified", Toast.LENGTH_LONG).show()
             }else if(checkHotelPrice()){
                 Toast.makeText(this, " Hotel price must be filled", Toast.LENGTH_LONG).show()
-            }else if(checkLongitude()){
-                Toast.makeText(this, " Hotel longitude must be filled", Toast.LENGTH_LONG).show()
-            }else if(checkLatitude()){
-                Toast.makeText(this, " Hotel latitude must be filled", Toast.LENGTH_LONG).show()
             }else if(checkPhoneNumber()){
                 Toast.makeText(this, " Hotel phone number must be filled", Toast.LENGTH_LONG).show()
             }else{
+                progressBar.visibility = View.VISIBLE
+                addBtn.visibility = View.GONE
                 val idx = HomeActivity.listCityName.indexOf(value)
                 val countryId = HomeActivity.listCity[idx].cityId.toInt()
 
                 if(urlImageDownload != Uri.parse("http://www.google.com")){
                     urlImage = urlImageDownload.toString()
                     Log.d("Error", urlImage)
+                }else{
+                    urlImage = ""
                 }
+
+                var hour = ""
+                var minute = ""
+                var amOrpm = ""
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(openTime.hour > 12){
+                        if((openTime.hour - 12) < 10)
+                            hour = "0"+(openTime.hour-12)
+                        else
+                            hour = (openTime.hour-12).toString()
+                        amOrpm = "PM"
+                    }else{
+                        hour = openTime.hour.toString()
+                        amOrpm = "AM"
+                    }
+
+                    if(openTime.minute < 10){
+                        minute = "0"+ openTime.minute
+                    }else{
+                        minute = openTime.minute.toString()
+                    }
+                }
+
+                val hotelOpenTime = "${hour}:${minute} $amOrpm"
 
                 var hotel = Hotel(
                     hotelName.text.toString(),
                     hotelAddress.text.toString(),
                     countryId,
-                    latitude.text.toString().toDouble(),
-                    longitude.text.toString().toDouble(),
+                    0.0,
+                    0.0,
                     urlImage,
                     hotelType.text.toString(),
                     hotelPhoneNumber.text.toString(),
-                    openTime.text.toString() + " " + amPm.text.toString(),
+                    hotelOpenTime,
                     hotelPrice.text.toString().toInt()
                 )
                 val document = (HomeActivity.listHotel.size+1).toString()
                 Log.d("document added ", document)
                 db.collection("hotels").document(document).set(hotel)
                     .addOnSuccessListener {
+                        HomeActivity.listHotelBaseLocation.add(hotel)
                         Toast.makeText(this, "New hotel has been successfully added", Toast.LENGTH_LONG).show()
                         addHotel = true
                         finish()
                     }
             }
-        }
-
-        backBtn.setOnClickListener {
-            finish()
         }
 
         imageHotel.setOnClickListener {
@@ -154,14 +177,13 @@ class AddNewHotelActivity : AppCompatActivity() {
         hotelAddress = findViewById(R.id.hotel_address)
         hotelType = findViewById(R.id.hotel_type)
         openTime = findViewById(R.id.hotel_open_time)
-        amPm = findViewById(R.id.hotel_am_pm)
+        openTime.setIs24HourView(true)
         hotelPrice = findViewById(R.id.hotel_price)
-        longitude = findViewById(R.id.hotel_longitude)
-        latitude = findViewById(R.id.hotel_latitude)
         location = findViewById(R.id.location_hotel)
         location.text = value
         imageHotel = findViewById(R.id.image_hotel)
         hotelPhoneNumber = findViewById(R.id.hotel_phone_number)
+        progressBar = findViewById(R.id.progress_bar)
     }
 
     private fun checkHotelName():Boolean{
@@ -176,24 +198,8 @@ class AddNewHotelActivity : AppCompatActivity() {
         return (hotelType.text.toString() == "Hotel" || hotelType.text.toString() == "Villa" || hotelType.text.toString() == "Resort")
     }
 
-    private fun checkOpenTime():Boolean{
-        return openTime.text.toString() == ""
-    }
-
     private fun checkHotelPrice():Boolean{
-        return openTime.text.toString() == ""
-    }
-
-    private fun checkLongitude():Boolean{
-        return longitude.text.toString() == ""
-    }
-
-    private fun checkLatitude():Boolean{
-        return latitude.text.toString() == ""
-    }
-
-    private fun checkAMPM():Boolean{
-        return (amPm.text.toString() == "AM" || amPm.text.toString() == "PM")
+        return hotelPrice.text.toString() == ""
     }
 
     private fun checkPhoneNumber():Boolean{

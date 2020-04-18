@@ -2,30 +2,30 @@ package com.abencrauz.yates
 
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.abencrauz.yates.adapter.ReviewRecycleViewAdapter
+import com.abencrauz.yates.adapter.HotelReviewRecycleViewAdapter
 import com.abencrauz.yates.models.UserReview
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_hotel_detail.*
+import kotlin.math.roundToInt
 
 class HotelDetailActivity : AppCompatActivity() {
 
     private val listHotelReview = mutableListOf<UserReview>()
     private var hotelId = ""
-    lateinit var reviewRecycleViewAdapter: ReviewRecycleViewAdapter
+    lateinit var reviewRecycleViewAdapter: HotelReviewRecycleViewAdapter
 
     private lateinit var layoutWriteReview:LinearLayout
 
@@ -45,9 +45,14 @@ class HotelDetailActivity : AppCompatActivity() {
     private lateinit var ratingBar:RatingBar
     private lateinit var descriptionEt:TextInputEditText
 
+    private var totalReviewRating:MutableList<ImageView> = mutableListOf()
+    private lateinit var countReviewer:TextView
+
     private val db = Firebase.firestore
     private var longitude:Double = 0.0
     private var latitude:Double = 0.0
+
+    private var hotelDefaultPrice = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +84,14 @@ class HotelDetailActivity : AppCompatActivity() {
 
         layoutWriteReview = findViewById(R.id.layout_add_review)
         layoutWriteReview.visibility = View.GONE
+
+        totalReviewRating.add(findViewById(R.id.r_1))
+        totalReviewRating.add(findViewById(R.id.r_2))
+        totalReviewRating.add(findViewById(R.id.r_3))
+        totalReviewRating.add(findViewById(R.id.r_4))
+        totalReviewRating.add(findViewById(R.id.r_5))
+
+        countReviewer = findViewById(R.id.count_review_tv)
     }
 
     private fun getIncomeContent(){
@@ -101,20 +114,44 @@ class HotelDetailActivity : AppCompatActivity() {
             hotelOpenTime.text = hotels[2]
             hotelPhoneNumber.text = hotels[3]
             hotelPrice.text = "IDR ${hotels[4]}"
+            hotelDefaultPrice = hotels[4].toInt()
             longitude = hotels[6].toDouble()
             latitude = hotels[7].toDouble()
         }
     }
 
     private fun getReviews(){
+        var count = 0
+        var countRating = 0
+
+        for(i in 0..4){
+            totalReviewRating[i].visibility = View.GONE
+        }
+
         if(listHotelReview.isNotEmpty())
             listHotelReview.clear()
 
-        db.collection("user-reviews").whereEqualTo("hotelId", hotelId)
+        db.collection("user-reviews").orderBy("timeReview", Query.Direction.DESCENDING)
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
-                    listHotelReview.add(document.toObject())
+                    if(document.data["hotelId"].toString() == hotelId) {
+                        listHotelReview.add(document.toObject())
+                        count++
+                        countRating += document.data["rating"].toString()[0].toString().toInt()
+                    }
                 }
+
+                countReviewer.text = count.toString()
+
+                if(count != 0){
+                    countRating = (countRating.toDouble() / count.toDouble()).roundToInt()
+                    countRating -= 1
+                }
+
+                if(countRating != 0)
+                    for(i in 0..countRating)
+                        totalReviewRating[i].visibility = View.VISIBLE
+
                 addDataSet()
             }
     }
@@ -127,21 +164,24 @@ class HotelDetailActivity : AppCompatActivity() {
         viewDealBtn.setOnClickListener {
             val toHotelBooking = Intent(this, HotelBookingActivity::class.java)
             toHotelBooking.putExtra("hotel_id", hotelId)
+            toHotelBooking.putExtra("hotel_price", hotelDefaultPrice)
             startActivity(toHotelBooking)
         }
 
         writeReviewBtn.setOnClickListener {
             if (layoutWriteReview.visibility == View.VISIBLE){
                 layoutWriteReview.visibility = View.GONE
+                writeReviewBtn.text = "Write A Review"
             }else{
                 layoutWriteReview.visibility = View.VISIBLE
+                writeReviewBtn.text = "Cancel Write Review"
             }
         }
 
         addReview.setOnClickListener {
+            addReview.isEnabled = false
             val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
             val userId = sharedPreferences.getString("user_id", "")
-
             var review = UserReview(
                 userId!!,
                 "",
@@ -154,6 +194,7 @@ class HotelDetailActivity : AppCompatActivity() {
             db.collection("user-reviews").add(review)
                 .addOnSuccessListener {
                     layoutWriteReview.visibility = View.GONE
+                    writeReviewBtn.text = "Write A Review"
                     getReviews()
                 }
         }
@@ -169,10 +210,11 @@ class HotelDetailActivity : AppCompatActivity() {
         var recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@HotelDetailActivity)
-            reviewRecycleViewAdapter = ReviewRecycleViewAdapter()
+            layoutManager = LinearLayoutManager(this@HotelDetailActivity, RecyclerView.VERTICAL, false)
+            reviewRecycleViewAdapter = HotelReviewRecycleViewAdapter()
             adapter = reviewRecycleViewAdapter
         }
+        recyclerView.isNestedScrollingEnabled = false
 
         addDataSet()
     }

@@ -3,9 +3,12 @@ package com.abencrauz.yates
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.abencrauz.yates.models.HotelBookings
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -14,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.lang.Exception
 
 class HotelBookingActivity : AppCompatActivity() {
 
@@ -26,23 +30,44 @@ class HotelBookingActivity : AppCompatActivity() {
     private lateinit var fullNameTL : TextInputLayout
     private lateinit var emailTL : TextInputLayout
     private lateinit var nightTL : TextInputLayout
+    private lateinit var totalPriceTV : TextView
 
     private val db = Firebase.firestore
     private var hotelId = ""
+    private var defaultPrice = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel_booking)
 
-        getIncomeContent()
         initializeComponent()
+        getIncomeContent()
         setToggleListener()
+        setTextChangeListener()
         setButtonListener()
     }
 
+    private fun setTextChangeListener(){
+        nightsET.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                try{
+                    totalPriceTV.text = "IDR ${defaultPrice * nightsET.text.toString().toInt()}"
+                }catch (e : Exception){}
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
+    }
+
     private fun getIncomeContent(){
-        if(intent.hasExtra("hotel_id"))
+        if(intent.hasExtra("hotel_id")){
             hotelId = intent.getStringExtra("hotel_id")
+            defaultPrice = intent.getIntExtra("hotel_price",0)
+            totalPriceTV.text = "IDR ${defaultPrice}"
+        }
     }
 
     private fun initializeComponent(){
@@ -55,6 +80,7 @@ class HotelBookingActivity : AppCompatActivity() {
         fullNameTL = findViewById(R.id.fullname_tl)
         emailTL = findViewById(R.id.email_tl)
         nightTL = findViewById(R.id.nights_tl)
+        totalPriceTV = findViewById(R.id.total_price_tv)
     }
 
     private fun setToggleListener(){

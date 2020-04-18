@@ -41,7 +41,7 @@
             android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".AddNewHotelActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:label="New Hotel"/>
         <activity android:name=".HotelActivity" />
         <activity
             android:name=".AccountActivity"
@@ -84,6 +84,7 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".alarm.ReminderBroadcast"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -74,6 +74,14 @@
     <string name="popular_hotel">Popular Hotel</string>
     <string name="no_post">NO POST</string>
     <string name="no_review">NO REVIEW</string>
+    <string name="view_deal">View Deal</string>
+    <string name="write_a_review">Write a review</string>
+    <string name="view_hotel_in_map">View Hotel In Map</string>
+    <string name="total_price">Total Price :</string>
+    <string name="hotel">Hotel</string>
+    <string name="not_found">Not Found</string>
+    <string name="add_hotel">Add Hotel</string>
+    <string name="open_time">Open Time</string>
 
 </resources>
 

@@ -11,15 +11,15 @@ import com.abencrauz.yates.models.UserReview
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.layout_review_cardview.view.*
+import kotlinx.android.synthetic.main.layout_hotel_review_cardview.view.*
 
-class ReviewRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HotelReviewRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items:List<UserReview> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ReviewViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.layout_review_cardview, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.layout_hotel_review_cardview, parent, false)
         )
     }
 
@@ -39,13 +39,13 @@ class ReviewRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         items = reviewList
     }
 
-    class ReviewViewHolder constructor( itemView:View ): RecyclerView.ViewHolder (itemView) {
+    class ReviewViewHolder constructor( itemView: View): RecyclerView.ViewHolder (itemView) {
         private val imageReview = itemView.image_review
         private val usernameTv = itemView.username_tv
-        private val nameTv = itemView.name_tv
         private val ratingTv = itemView.rating_tv
         private val descriptionTv = itemView.description_tv
         private val timeReviewTv = itemView.time_review_tv
+        private val profilePicture = itemView.ci_profile
 
         private val db = Firebase.firestore
 
@@ -56,14 +56,9 @@ class ReviewRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
             userRef.document(userReview.userId).get().addOnSuccessListener { document ->
                 usernameTv.text = document.data?.get("username").toString()
-            }
-
-            if(userReview.hotelId != ""){
-                val index = userReview.hotelId.toInt()
-                nameTv.text = HomeActivity.listHotel[index-1].name
-            } else {
-                val index = HomeActivity.listRestaurantId.indexOf(userReview.restaurantId)
-                nameTv.text = HomeActivity.listRestaurant[index-1].name
+                val pi = document.data?.get("image").toString()
+                if(pi!="")
+                    Picasso.get().load(Uri.parse(pi)).into(profilePicture)
             }
 
             ratingTv.rating = userReview.rating.toFloat()
@@ -72,5 +67,4 @@ class ReviewRecycleViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         }
 
     }
-
 }

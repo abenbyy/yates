@@ -4,23 +4,29 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.adapter.HotelRecycleViewAdapter
 import com.abencrauz.yates.models.Hotel
+import kotlinx.android.synthetic.main.activity_hotel.*
 
 class HotelActivity : AppCompatActivity(), HotelRecycleViewAdapter.OnHotelItemClickListener {
 
     var listHotel:MutableList<Hotel> = mutableListOf()
 
     private lateinit var hotelRecycleViewAdapter: HotelRecycleViewAdapter
+    private lateinit var notFoundHotel : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel)
+
+        notFoundHotel = findViewById(R.id.not_found_tv)
 
         setListHotel()
         initAdapter()
@@ -99,20 +105,21 @@ class HotelActivity : AppCompatActivity(), HotelRecycleViewAdapter.OnHotelItemCl
     }
 
     private fun addDataSet(){
+        if(listHotel.isEmpty()){
+            notFoundHotel.visibility = View.VISIBLE
+            findViewById<RecyclerView>(R.id.recycler_view).visibility = View.GONE
+        }else{
+            notFoundHotel.visibility = View.GONE
+            findViewById<RecyclerView>(R.id.recycler_view).visibility = View.VISIBLE
+        }
         hotelRecycleViewAdapter.submitList(listHotel)
         hotelRecycleViewAdapter.notifyDataSetChanged()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setListHotel()
-        addDataSet()
     }
 
     override fun onResume() {
         super.onResume()
         setListHotel()
-        addDataSet()
+        initAdapter()
     }
 
     override fun onItemClickListener(items: Hotel, position: Int) {

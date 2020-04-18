@@ -1,19 +1,25 @@
 package com.abencrauz.yates
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.adapter.PopularHotelRecycleViewAdapter
 import com.abencrauz.yates.adapter.PopularRestaurantRecycleViewAdapter
 import com.abencrauz.yates.adapter.PostRecycleViewAdapter
+import com.abencrauz.yates.alarm.ReminderBroadcast
 import com.abencrauz.yates.models.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -23,6 +29,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import java.util.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -71,6 +78,9 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        createNotificationChannel()
+        activeAlarm()
+
         auth = FirebaseAuth.getInstance()
 
         locationAc = findViewById(R.id.location_ac)
@@ -97,7 +107,6 @@ class HomeActivity : AppCompatActivity() {
         setAdapterPopularRestaurant()
         subscribeMessage()
     }
-
 
     private fun subscribeMessage(){
         FirebaseMessaging.getInstance().subscribeToTopic("Login")
@@ -302,29 +311,35 @@ class HomeActivity : AppCompatActivity() {
                         db.collection("hotels").document(document.data["hotelId"].toString())
                             .get()
                             .addOnSuccessListener { doc ->
-                                var add = true
-                                for( j in popularHotel ){
-                                    if(j.name == doc["name"].toString()){
-                                        add = false
-                                        break
+                                db.collection("cities").document(doc["countryId"].toString())
+                                    .get()
+                                    .addOnSuccessListener { res ->
+                                        if(res["name"].toString() == locationAc.text.toString().trim()){
+                                            var add = true
+                                            for( j in popularHotel ){
+                                                if(j.name == doc["name"].toString()){
+                                                    add = false
+                                                    break
+                                                }
+                                            }
+                                            if(add){
+                                                var i = Hotel(
+                                                    doc["name"].toString(),
+                                                    doc["address"].toString(),
+                                                    doc["countryId"].toString().toInt(),
+                                                    doc["latitude"].toString().toDouble(),
+                                                    doc["longitude"].toString().toDouble(),
+                                                    doc["image"].toString(),
+                                                    doc["type"].toString(),
+                                                    doc["phoneNumber"].toString(),
+                                                    doc["openTime"].toString(),
+                                                    doc["price"].toString().toInt()
+                                                )
+                                                popularHotel.add(i)
+                                                addDataSetHotel()
+                                            }
+                                        }
                                     }
-                                }
-                                if(add){
-                                    var i = Hotel(
-                                        doc["name"].toString(),
-                                        doc["address"].toString(),
-                                        doc["countryId"].toString().toInt(),
-                                        doc["latitude"].toString().toDouble(),
-                                        doc["longitude"].toString().toDouble(),
-                                        doc["image"].toString(),
-                                        doc["type"].toString(),
-                                        doc["phoneNumber"].toString(),
-                                        doc["openTime"].toString(),
-                                        doc["price"].toString().toInt()
-                                    )
-                                    popularHotel.add(i)
-                                    addDataSetHotel()
-                                }
                             }
                 }
             }
@@ -501,6 +516,56 @@ class HomeActivity : AppCompatActivity() {
         }
         popularRestaurantRecycleViewAdapter.submitList(popularRestaurant)
         popularRestaurantRecycleViewAdapter.notifyDataSetChanged()
+    }
+
+    private fun activeAlarm(){
+        val intent = Intent(this, ReminderBroadcast::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+
+        val alarmUp = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_NO_CREATE) != null
+
+        if (!alarmUp) {
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, 13)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
+
+            alarmManager?.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+            )
+        }else{
+            Log.d("myTag", "Alarm is already active")
+        }
+
+//        val timeActive = System.currentTimeMillis()
+//        val tenSecondInMillis = 1000 * 10
+//        alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP,
+//            timeActive + tenSecondInMillis,
+//            1000*5,
+//            pendingIntent
+//        )
+
+    }
+
+    private fun createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "YATESChannel"
+            val desc = "Channel for YATES Reminder"
+            val important = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("notifyMe", name, important)
+            channel.description = desc
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+
+            Log.d("Alarm set", "alarm has been set")
+        }
     }
 
 }
