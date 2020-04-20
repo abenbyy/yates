@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.HomeActivity
+import com.abencrauz.yates.PreferenceHelper
 import com.abencrauz.yates.R
 import com.abencrauz.yates.models.Hotel
 import com.squareup.picasso.Picasso
@@ -54,7 +55,7 @@ class HotelRecycleViewAdapter(var clickListener: OnHotelItemClickListener) : Rec
             hotelName.text = hotel.name
             hotelAddress.text = hotel.address
             hotelOpenTime.text = "Open time : ${hotel.openTime}"
-            hotelPrice.text = "IDR ${hotel.price}"
+            hotelPrice.text = PreferenceHelper.currencyString+ " ${(hotel.price.toDouble() * PreferenceHelper.currencyMultiplier)}"
 
             itemView.setOnClickListener{
                 action.onItemClickListener(hotel, adapterPosition)
