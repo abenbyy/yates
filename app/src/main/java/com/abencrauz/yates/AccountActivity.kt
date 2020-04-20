@@ -15,6 +15,7 @@ class AccountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
+        supportActionBar?.hide()
 
         initializeBottomNavigationMenu()
         initTab()
@@ -44,6 +45,11 @@ class AccountActivity : AppCompatActivity() {
             }
             R.id.nav_add -> {
                 val intent = Intent(this,AddPostActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(intent)
+            }
+            R.id.nav_bookings -> {
+                val intent = Intent(this,BookingsActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivity(intent)
             }

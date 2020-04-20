@@ -9,6 +9,12 @@
     </style>
 
     <!--  Application Theme without title bar  -->
+    <style name="AppThemeWithoutActionBarMaterialComponents" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="colorPrimaryDark">@color/primaryBlueDark</item>
+        <item name="colorAccent">@color/backWhite</item>
+    </style>
+
     <style name="AppThemeWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryBlue</item>
         <item name="colorPrimaryDark">@color/primaryBlueDark</item>

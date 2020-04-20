@@ -44,11 +44,10 @@
             android:label="New Hotel"/>
         <activity android:name=".HotelActivity" />
         <activity
-            android:name=".AccountActivity"
-             />
+            android:name=".AccountActivity"/>
         <activity
             android:name=".AddPostActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeWithoutActionBarMaterialComponents" />
         <activity
             android:name=".LocationActivity"
             android:label="@string/title_activity_restaurant_location" />
@@ -60,12 +59,10 @@
         <activity android:name=".RestaurantActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:noHistory="true"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:noHistory="true"/>
         <activity
             android:name=".ProfileActivity"
-            android:noHistory="true"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:noHistory="true"/>
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppThemeWithoutActionBar" />

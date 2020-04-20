@@ -444,6 +444,15 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         getUserPost()
         getUserReview()
+        if(listPostBaseCity.isNotEmpty()){
+            getPostBaseOnCity()
+        }
+        if(popularHotel.isNotEmpty()){
+            getPopularHotel()
+        }
+        if(popularRestaurant.isNotEmpty()){
+            getPopularRestaurant()
+        }
     }
 
     override fun finish() {
