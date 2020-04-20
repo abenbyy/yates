@@ -19,6 +19,7 @@ class HotelBookingAdapter: RecyclerView.Adapter<HotelBookingAdapter.ViewHolder> 
     private var db = Firebase.firestore
     private var hotRef = db.collection("hotels")
     private var bookRef = db.collection("hotel-bookings")
+    private var userRef = db.collection("users")
     private var context:Context
     private lateinit var bookings:Vector<HotelBookings>
     private lateinit var ids: Vector<String>
@@ -34,7 +35,7 @@ class HotelBookingAdapter: RecyclerView.Adapter<HotelBookingAdapter.ViewHolder> 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
-        LayoutInflater.from(context).inflate(R.layout.item_restaurant_booking, parent, false))
+        LayoutInflater.from(context).inflate(R.layout.item_hotel_booking, parent, false))
 
     override fun getItemCount(): Int = bookings.size
 
@@ -44,8 +45,11 @@ class HotelBookingAdapter: RecyclerView.Adapter<HotelBookingAdapter.ViewHolder> 
             .addOnSuccessListener { documentSnapshot ->
                 holder.tvHotel.text = documentSnapshot.data!!["name"].toString()
             }
+        var q2 = userRef.document(bookings.get(position).userId).get()
+            .addOnSuccessListener {document->
+                holder.tvName.text = document.data!!["fullname"].toString()
+            }
 
-        holder.tvName.text = bookings.get(position).hotelId
         holder.tvPerson.text = bookings.get(position).nights.toString()
         holder.tvEmail.text = bookings.get(position).email
         val dt = bookings.get(position).timeBooking!!.toDate()
@@ -71,10 +75,10 @@ class HotelBookingAdapter: RecyclerView.Adapter<HotelBookingAdapter.ViewHolder> 
         var tvTime:TextView
         var btnCancel: MaterialButton
         constructor(view: View):super(view){
-            tvHotel = view.findViewById(R.id.tv_name)
+            tvHotel = view.findViewById(R.id.tv_hotel)
             tvName = view.findViewById(R.id.tv_name)
             tvEmail = view.findViewById(R.id.tv_email)
-            tvPerson = view.findViewById(R.id.tv_person)
+            tvPerson = view.findViewById(R.id.tv_nights)
             tvTime = view.findViewById(R.id.tv_time)
 
             btnCancel = view.findViewById(R.id.btn_cancel)

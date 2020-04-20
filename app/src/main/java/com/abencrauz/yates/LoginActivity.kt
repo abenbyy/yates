@@ -49,10 +49,10 @@ class LoginActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", "")
         Log.d("Logged in", userId)
-        if(userId != ""){
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
+//        if(userId != ""){
+//            val intent = Intent(this, HomeActivity::class.java)
+//            startActivity(intent)
+//        }
         initComponent()
 
 
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         })
 
         btnReg.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         })
 
