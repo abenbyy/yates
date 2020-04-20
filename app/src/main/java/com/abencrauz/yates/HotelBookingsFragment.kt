@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.adapters.HotelBookingAdapter
@@ -35,12 +36,14 @@ class HotelBookingsFragment : Fragment() {
         bookings = Vector()
         ids = Vector()
         val v = inflater.inflate(R.layout.fragment_restaurant_booking, container, false)
-
+        val tv = v.findViewById<TextView>(R.id.tv_nobook)
+        tv.visibility = View.GONE
         rvRbooking = v.findViewById(R.id.rv_rbookings)
         rvAdapter = HotelBookingAdapter(v.context)
         var q = bookRef.whereEqualTo("userId",userId)
         q.get().addOnSuccessListener { documents->
             if(documents.size()>0){
+                tv.visibility = View.GONE
                 for(document in documents){
                     bookings.add(document.toObject<HotelBookings>())
                     ids.add(document.id)
@@ -48,6 +51,8 @@ class HotelBookingsFragment : Fragment() {
                 rvAdapter.setBooking(bookings)
                 rvAdapter.setIds(ids)
                 rvAdapter.notifyDataSetChanged()
+            }else{
+                tv.visibility = View.VISIBLE
             }
 
             rvAdapter = HotelBookingAdapter(this.context!!)
