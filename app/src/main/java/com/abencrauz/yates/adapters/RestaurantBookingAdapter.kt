@@ -1,10 +1,12 @@
 package com.abencrauz.yates.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.abencrauz.yates.R
 import com.abencrauz.yates.models.RestaurantBooking
@@ -51,12 +53,24 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
         holder.tvTime.text = dt.toString()
 
         holder.btnCancel.setOnClickListener(View.OnClickListener {
-            bookRef.document(ids.get(position))
-                .delete().addOnSuccessListener {
-                    bookings.removeAt(position)
-                    ids.removeAt(position)
-                    this.notifyDataSetChanged()
-                }
+            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+            dialogBuilder.setMessage(R.string.cancel_booking)
+            dialogBuilder.setCancelable(false)
+            dialogBuilder.setPositiveButton("Yes"){dialog, which ->
+                bookRef.document(ids.get(position))
+                    .delete().addOnSuccessListener {
+                        bookings.removeAt(position)
+                        ids.removeAt(position)
+                        this.notifyDataSetChanged()
+                    }
+            }
+            dialogBuilder.setNegativeButton("No"){dialog, which ->
+
+            }
+
+            val dialog = dialogBuilder.create()
+            dialog.setTitle(R.string.cancel_confirmation)
+            dialog.show()
         })
 
 

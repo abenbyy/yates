@@ -378,7 +378,8 @@ class HomeActivity : AppCompatActivity() {
                                             doc["address"].toString(),
                                             doc["hours"].toString(),
                                             doc["type"].toString(),
-                                            doc["meal"].toString()
+                                            doc["meal"].toString(),
+                                            doc["phone"].toString()
                                         )
                                         popularRestaurant.add(i)
                                         addDataSetRestaurant()

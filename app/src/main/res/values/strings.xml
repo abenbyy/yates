@@ -36,8 +36,9 @@
     <string name="view_map">View on Map</string>
     <string name="reviews">Review(s)</string>
 
+    <string name="no_review_yet">No Reviews Yet</string>
     <string name="want_to_eat">Want to Eat Here?</string>
-    <string name="write_review">Write Review</string>
+    <string name="write_review">+Write Review</string>
     <string name="book_a_table">Book a Table</string>
     <string name="address">Address</string>
     <string name="out_of">Out of</string>
@@ -82,6 +83,24 @@
     <string name="not_found">Not Found</string>
     <string name="add_hotel">Add Hotel</string>
     <string name="open_time">Open Time</string>
+    <string name="close_time">Close Time</string>
+
+    <string name="changes_saved">Changes Saved</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="type">Type</string>
+    <string name="meal">Meal</string>
+
+
+    <string name="theme">Theme</string>
+    <string name="currency">Currency</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="cancel_booking">Cancel Booking?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel_confirmation">Cancel Confirmation</string>
+    <string name="no_bookings">No Bookings</string>
+
 
 </resources>
 

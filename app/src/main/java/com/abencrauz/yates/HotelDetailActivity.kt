@@ -113,7 +113,7 @@ class HotelDetailActivity : AppCompatActivity() {
             hotelAddress.text = hotels[5]
             hotelOpenTime.text = hotels[2]
             hotelPhoneNumber.text = hotels[3]
-            hotelPrice.text = "IDR ${hotels[4]}"
+            hotelPrice.text = PreferenceHelper.currencyString+ " ${(hotels[4].toDouble() * PreferenceHelper.currencyMultiplier)}"
             hotelDefaultPrice = hotels[4].toInt()
             longitude = hotels[6].toDouble()
             latitude = hotels[7].toDouble()

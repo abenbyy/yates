@@ -45,7 +45,7 @@
         <activity android:name=".HotelActivity" />
         <activity
             android:name=".AccountActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+             />
         <activity
             android:name=".AddPostActivity"
             android:theme="@style/AppThemeWithoutActionBar" />
@@ -58,6 +58,10 @@
         <activity android:name=".RestaurantDetailActivity" />
         <activity android:name=".RestaurantFilteredActivity" />
         <activity android:name=".RestaurantActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:noHistory="true"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".ProfileActivity"
             android:noHistory="true"

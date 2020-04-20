@@ -85,7 +85,8 @@ class RestaurantActivity : AppCompatActivity() {
                             document.data["address"] as String,
                             document.data["hours"] as String,
                             document.data["type"] as String,
-                            document.data["meal"] as String
+                            document.data["meal"] as String,
+                            document.data["phone"] as String
                         )
                         restaurants.add(r)
                     }

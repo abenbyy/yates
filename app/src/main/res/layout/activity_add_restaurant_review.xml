@@ -12,17 +12,11 @@
         tools:context=".AddRestaurantReviewActivity">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/raisonne_font"
-            android:textSize="30dp"
-            android:text="@string/write_review"/>
-        <TextView
             android:id="@+id/tv_restaurant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
-            android:textSize="18dp"
+            android:textSize="30dp"
             android:text="Restaurant Name"/>
 
         <RatingBar

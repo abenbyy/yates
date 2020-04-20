@@ -18,6 +18,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_restaurant_detail.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -52,6 +53,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_restaurant_detail)
 
         cont = findViewById(R.id.cont_detail)
+        toggleRev(false)
         pb = findViewById(R.id.pb)
         toggleLoad(true)
         restaurantId = ""
@@ -82,17 +84,29 @@ class RestaurantDetailActivity : AppCompatActivity() {
         }
     }
 
+    fun toggleRev(bool: Boolean){
+        if(bool){
+            ll_rev.visibility = View.VISIBLE
+            tv_norev.visibility = View.GONE
+        }else{
+            ll_rev.visibility = View.GONE
+            tv_norev.visibility = View.VISIBLE
+        }
+    }
+
 
     fun bindReview(){
         var q = revRef.whereEqualTo("restaurantId",restaurantId)
         q.get()
             .addOnSuccessListener { documents ->
                 if(documents.size()>0){
+                    tv_review.text = documents.size().toString()
+                    var count = 0
                     reviews = Vector()
                     for(document in documents){
                         val rev = document.toObject<Review>()
                         var temp = document.data
-
+                        count+=rev.rating
                         reviews.add(rev)
 //                        reviews.add(Review(
 //                            temp["hotelId"].toString(),
@@ -104,12 +118,15 @@ class RestaurantDetailActivity : AppCompatActivity() {
 //                            temp["title"].toString(),
 //                            temp["description"].toString()
 //                        ))
+                        toggleRev(true)
                     }
-
-
+                    var avg = count/documents.size()
+                    setReviews(avg)
                     reviewAdapter.setReview(reviews)
                     reviewAdapter.notifyDataSetChanged()
 
+                }else{
+                    toggleRev(false)
                 }
             }
     }
@@ -137,12 +154,28 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     }
 
+    fun setReviews(value: Int){
+        if(value < 5){
+            r_5.setImageResource(R.drawable.ic_unchecked)
+        }
+        if(value < 4){
+            r_4.setImageResource(R.drawable.ic_unchecked)
+        }
+        if(value < 3){
+            r_3.setImageResource(R.drawable.ic_unchecked)
+        }
+        if(value < 2){
+            r_2.setImageResource(R.drawable.ic_unchecked)
+        }
+    }
+
     fun handleRestaurantData(){
         tvName.text = restaurant["name"].toString()
         tvMeal.text = restaurant["meal"].toString()
         tvType.text = restaurant["type"].toString()
         tvHours.text = restaurant["hours"].toString()
         tvAddress.text = restaurant["address"].toString()
+        tv_phone.text = restaurant["phone"].toString()
 
         btnMap.setOnClickListener(View.OnClickListener {
 //            val gmmIntentUri: Uri =

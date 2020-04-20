@@ -9,7 +9,8 @@ data class Restaurant(
     var address:String?,
     var hours: String?,
     var type: String?,
-    var meal: String?
+    var meal: String?,
+    var phone: String?
 ){
-    constructor() : this("", "", "", "", "", "","")
+    constructor() : this("", "", "", "", "", "","","")
 }

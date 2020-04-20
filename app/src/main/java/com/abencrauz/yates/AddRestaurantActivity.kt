@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_add_restaurant.*
 import java.util.ArrayList
 
 class AddRestaurantActivity : AppCompatActivity() {
@@ -55,6 +56,7 @@ class AddRestaurantActivity : AppCompatActivity() {
 
         val adapter2 = ArrayAdapter<String>(this, R.layout.dropdown_item, types)
         actvType.setAdapter(adapter2)
+        pb.visibility = View.GONE
 
         cityRef.get()
             .addOnSuccessListener { documents->
@@ -81,7 +83,7 @@ class AddRestaurantActivity : AppCompatActivity() {
         actvType = findViewById(R.id.actv_type)
         actvLocation = findViewById(R.id.actv_loc)
         etName = findViewById(R.id.et_name)
-        etHours = findViewById(R.id.et_hours)
+
         etAddress = findViewById(R.id.et_address)
         btnImg = findViewById(R.id.btn_image)
         btnAdd = findViewById(R.id.btn_add)
@@ -89,6 +91,7 @@ class AddRestaurantActivity : AppCompatActivity() {
     }
 
     fun uploadRestaurant(){
+        pb.visibility = View.VISIBLE
         var imgUri = ""
         if(IMG_EXIST){
             Toast.makeText(this,"Image exist", Toast.LENGTH_LONG)
@@ -102,12 +105,14 @@ class AddRestaurantActivity : AppCompatActivity() {
                             address = etAddress.text.toString(),
                             location = actvLocation.text.toString(),
                             image = imgUri,
-                            hours = etHours.text.toString(),
+                            hours = tp_open.currentHour.toString()+ ":"+ tp_open.currentMinute.toString() + " - "+tp_close.currentHour.toString()+ ":"+ tp_close.currentMinute.toString(),
                             meal = actvMeal.text.toString(),
-                            type = actvType.text.toString()
+                            type = actvType.text.toString(),
+                            phone = et_phone.text.toString()
                         )
 
                         restRef.add(res).addOnSuccessListener {
+                            pb.visibility = View.GONE
                             Toast.makeText(this, "Post Success", Toast.LENGTH_LONG)
                             finish()
                         }
@@ -119,12 +124,14 @@ class AddRestaurantActivity : AppCompatActivity() {
                 address = etAddress.text.toString(),
                 location = actvLocation.text.toString(),
                 image = "",
-                hours = etHours.text.toString(),
+                hours = tp_open.currentHour.toString()+ ":"+ tp_open.currentMinute.toString() + " - "+tp_close.currentHour.toString()+ ":"+ tp_close.currentMinute.toString(),
                 meal = actvMeal.text.toString(),
-                type = actvType.text.toString()
+                type = actvType.text.toString(),
+                phone = et_phone.text.toString()
             )
 
             restRef.add(res).addOnSuccessListener {
+                pb.visibility = View.GONE
                 Toast.makeText(this, "Post Success", Toast.LENGTH_LONG)
                 finish()
             }

@@ -27,6 +27,7 @@ class AccountActivity : AppCompatActivity() {
         viewPager.adapter = fragmentAdapter
 
         fragmentAdapter.addFragment(ProfileActivity())
+        fragmentAdapter.addFragment(SettingsActivity())
     }
 
     private fun initializeBottomNavigationMenu(){

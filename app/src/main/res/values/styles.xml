@@ -12,7 +12,7 @@
     <style name="AppThemeWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryBlue</item>
         <item name="colorPrimaryDark">@color/primaryBlueDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/backWhite</item>
     </style>
 
     <style name="Divider">
