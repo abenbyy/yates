@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/write_a_review"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="?attr/materialButtonOutlinedStyle"
                 />
 
             <LinearLayout
