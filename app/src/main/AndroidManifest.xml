@@ -37,8 +37,7 @@
             android:theme="@style/AppThemeWithoutActionBar"
             />
         <activity
-            android:name=".HotelDetailActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:name=".HotelDetailActivity"/>
         <activity
             android:name=".AddNewHotelActivity"
             android:label="New Hotel"/>

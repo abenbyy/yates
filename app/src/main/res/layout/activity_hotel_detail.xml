@@ -182,8 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/write_a_review"
-                android:textColor="@color/primaryBlue"
-                android:background="@color/backWhite"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 />
 
             <LinearLayout
