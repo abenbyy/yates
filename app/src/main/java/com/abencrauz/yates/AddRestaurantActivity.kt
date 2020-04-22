@@ -49,6 +49,9 @@ class AddRestaurantActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_restaurant)
 
+        tp_open.setIs24HourView(true)
+        tp_close.setIs24HourView(true)
+
         initComponents()
 
         val adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, meals)

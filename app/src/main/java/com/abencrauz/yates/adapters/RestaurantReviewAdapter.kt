@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -42,28 +43,30 @@ class RestaurantReviewAdapter: RecyclerView.Adapter<RestaurantReviewAdapter.View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvTitle.text = reviews.get(position).title.toString()
         holder.tvDescription.text = reviews.get(position).description.toString()
+        holder.ratingBar.rating = reviews.get(position).rating.toFloat()
         Log.d("Rating", reviews.get(position).rating.toString())
-        holder.ivR1.setImageResource(R.drawable.ic_unchecked)
-        holder.ivR2.setImageResource(R.drawable.ic_unchecked)
-        holder.ivR3.setImageResource(R.drawable.ic_unchecked)
-        holder.ivR4.setImageResource(R.drawable.ic_unchecked)
-        holder.ivR5.setImageResource(R.drawable.ic_unchecked)
+//        holder.ivR1.setImageResource(R.drawable.ic_unchecked)
+//        holder.ivR2.setImageResource(R.drawable.ic_unchecked)
+//        holder.ivR3.setImageResource(R.drawable.ic_unchecked)
+//        holder.ivR4.setImageResource(R.drawable.ic_unchecked)
+//        holder.ivR5.setImageResource(R.drawable.ic_unchecked)
+//
+//        if(reviews.get(position).rating >= 1){
+//            holder.ivR1.setImageResource(R.drawable.ic_checked)
+//        }
+//        if(reviews.get(position).rating >= 2){
+//            holder.ivR2.setImageResource(R.drawable.ic_checked)
+//        }
+//        if(reviews.get(position).rating >= 3){
+//            holder.ivR3.setImageResource(R.drawable.ic_checked)
+//        }
+//        if(reviews.get(position).rating >= 4){
+//            holder.ivR4.setImageResource(R.drawable.ic_checked)
+//        }
+//        if(reviews.get(position).rating == 5){
+//            holder.ivR5.setImageResource(R.drawable.ic_checked)
+//        }
 
-        if(reviews.get(position).rating >= 1){
-            holder.ivR1.setImageResource(R.drawable.ic_checked)
-        }
-        if(reviews.get(position).rating >= 2){
-            holder.ivR2.setImageResource(R.drawable.ic_checked)
-        }
-        if(reviews.get(position).rating >= 3){
-            holder.ivR3.setImageResource(R.drawable.ic_checked)
-        }
-        if(reviews.get(position).rating >= 4){
-            holder.ivR4.setImageResource(R.drawable.ic_checked)
-        }
-        if(reviews.get(position).rating == 5){
-            holder.ivR5.setImageResource(R.drawable.ic_checked)
-        }
         holder.tvTime.text = reviews.get(position).timeReview!!.toDate().toString()
         if(reviews.get(position).image != ""){
             Picasso.get().load(reviews.get(position).image).into(holder.ivImage)
@@ -87,26 +90,32 @@ class RestaurantReviewAdapter: RecyclerView.Adapter<RestaurantReviewAdapter.View
         var tvName : TextView
         var tvTime : TextView
         var ivImage : ImageView
-        var ivR1 : ImageView
-        var ivR2 : ImageView
-        var ivR3 : ImageView
-        var ivR4 : ImageView
-        var ivR5 : ImageView
+
+//        var ivR1 : ImageView
+//        var ivR2 : ImageView
+//        var ivR3 : ImageView
+//        var ivR4 : ImageView
+//        var ivR5 : ImageView
+
         var tvTitle : TextView
         var tvDescription : TextView
+        var ratingBar : RatingBar
         constructor(view: View): super(view){
             ciImage = view.findViewById(R.id.ci_profile)
             tvName = view.findViewById(R.id.tv_name)
             tvTime = view.findViewById(R.id.tv_time)
-            ivR1 = view.findViewById<ImageView>(R.id.r_1)
 
-            ivR2 = view.findViewById<ImageView>(R.id.r_2)
+//            ivR1 = view.findViewById<ImageView>(R.id.r_1)
+//
+//            ivR2 = view.findViewById<ImageView>(R.id.r_2)
+//
+//            ivR3 = view.findViewById<ImageView>(R.id.r_3)
+//
+//            ivR4 =  view.findViewById<ImageView>(R.id.r_4)
+//
+//            ivR5 = view.findViewById<ImageView>(R.id.r_5)
 
-            ivR3 = view.findViewById<ImageView>(R.id.r_3)
-
-            ivR4 =  view.findViewById<ImageView>(R.id.r_4)
-
-            ivR5 = view.findViewById<ImageView>(R.id.r_5)
+            ratingBar = view.findViewById(R.id.rating_tv)
 
             ivImage = view.findViewById(R.id.iv_image)
             tvTitle = view.findViewById(R.id.tv_title)
