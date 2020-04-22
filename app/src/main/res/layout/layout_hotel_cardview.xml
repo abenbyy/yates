@@ -33,7 +33,7 @@
                 android:text="hotel name"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/fontBlack"
+
                 />
 
             <TextView
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Open Time : "
-                android:textColor="@color/fontBlack"
+
                 />
 
             <TextView
@@ -55,7 +55,7 @@
                 android:id="@+id/hotel_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/fontBlack"
+
                 android:textStyle="bold"
                 android:text="Price"
                 />

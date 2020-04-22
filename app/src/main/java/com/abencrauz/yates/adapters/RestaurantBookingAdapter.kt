@@ -56,7 +56,7 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this.context)
             dialogBuilder.setMessage(R.string.cancel_booking)
             dialogBuilder.setCancelable(false)
-            dialogBuilder.setPositiveButton("Yes"){dialog, which ->
+            dialogBuilder.setPositiveButton(R.string.yes){dialog, which ->
                 bookRef.document(ids.get(position))
                     .delete().addOnSuccessListener {
                         bookings.removeAt(position)
@@ -64,7 +64,7 @@ class RestaurantBookingAdapter: RecyclerView.Adapter<RestaurantBookingAdapter.Vi
                         this.notifyDataSetChanged()
                     }
             }
-            dialogBuilder.setNegativeButton("No"){dialog, which ->
+            dialogBuilder.setNegativeButton(R.string.no){dialog, which ->
 
             }
 

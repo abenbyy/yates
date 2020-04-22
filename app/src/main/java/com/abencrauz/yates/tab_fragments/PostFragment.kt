@@ -15,7 +15,7 @@ import com.abencrauz.yates.models.UserPost
 
 class PostFragment() : Fragment() {
 
-    lateinit var listPost:MutableList<UserPost>
+    var listPost:MutableList<UserPost> = mutableListOf()
 
     lateinit var postRecycleViewAdapter: PostRecycleViewAdapter
     lateinit var recyclerView: RecyclerView

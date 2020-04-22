@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="@color/fontBlack"
+            android:textStyle="bold"
             android:text="@string/by_meal"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="@color/fontBlack"
+            android:textStyle="bold"
             android:text="@string/by_type"/>
 
         <androidx.recyclerview.widget.RecyclerView

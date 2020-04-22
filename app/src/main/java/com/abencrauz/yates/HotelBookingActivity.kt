@@ -51,7 +51,7 @@ class HotelBookingActivity : AppCompatActivity() {
         nightsET.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 try{
-                    totalPriceTV.text = "IDR ${defaultPrice * nightsET.text.toString().toInt()}"
+                    totalPriceTV.text = PreferenceHelper.currencyString + " " + String.format("%.2f",(defaultPrice * nightsET.text.toString().toInt()).toDouble() * PreferenceHelper.currencyMultiplier)
                 }catch (e : Exception){}
             }
 

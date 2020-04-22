@@ -55,7 +55,7 @@ class HotelRecycleViewAdapter(var clickListener: OnHotelItemClickListener) : Rec
             hotelName.text = hotel.name
             hotelAddress.text = hotel.address
             hotelOpenTime.text = "Open time : ${hotel.openTime}"
-            hotelPrice.text = PreferenceHelper.currencyString+ " ${(hotel.price.toDouble() * PreferenceHelper.currencyMultiplier)}"
+            hotelPrice.text = PreferenceHelper.currencyString+" "+ String.format("%.2f",(hotel.price.toDouble() * PreferenceHelper.currencyMultiplier))
 
             itemView.setOnClickListener{
                 action.onItemClickListener(hotel, adapterPosition)

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="Booking Hotel"
             android:textSize="20sp"
-            android:textColor="@color/fontBlack"
+
             android:textStyle="bold"
             android:layout_gravity="center"
             />
@@ -148,7 +148,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/total_price"
-            android:textColor="@color/fontBlack"
+
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_weight="0.4"

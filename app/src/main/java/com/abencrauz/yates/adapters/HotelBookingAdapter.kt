@@ -1,5 +1,6 @@
 package com.abencrauz.yates.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -56,12 +57,24 @@ class HotelBookingAdapter: RecyclerView.Adapter<HotelBookingAdapter.ViewHolder> 
         holder.tvTime.text = dt.toString()
 
         holder.btnCancel.setOnClickListener(View.OnClickListener {
-            bookRef.document(ids.get(position))
-                .delete().addOnSuccessListener {
-                    bookings.removeAt(position)
-                    ids.removeAt(position)
-                    this.notifyDataSetChanged()
-                }
+            val dialogBuilder:AlertDialog.Builder = AlertDialog.Builder(this.context)
+            dialogBuilder.setMessage(R.string.cancel_booking)
+            dialogBuilder.setCancelable(false)
+            dialogBuilder.setPositiveButton(R.string.yes){dialog, which ->
+                bookRef.document(ids.get(position))
+                    .delete().addOnSuccessListener {
+                        bookings.removeAt(position)
+                        ids.removeAt(position)
+                        this.notifyDataSetChanged()
+                    }
+            }
+            dialogBuilder.setNegativeButton(R.string.no){dialog, which ->
+
+            }
+
+            val dialog = dialogBuilder.create()
+            dialog.setTitle(R.string.cancel_confirmation)
+            dialog.show()
         })
 
 

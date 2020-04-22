@@ -6,7 +6,7 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backWhite"
+
     tools:context=".LoginActivity">
 
 
@@ -22,7 +22,7 @@
             android:fontFamily="@font/raisonne_font"
             android:text="@string/login"
             android:layout_marginRight="20dp"
-            android:textColor="@color/fontBlack"
+            android:textStyle="bold"
             android:textSize="40sp" />
 
         <ImageView

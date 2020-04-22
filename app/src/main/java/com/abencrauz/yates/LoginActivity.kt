@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        //mGoogleSignInClient.signOut()
+        mGoogleSignInClient.signOut()
         val sharedPreferences = getSharedPreferences("users", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", "")
         Log.d("Logged in", userId)
@@ -59,7 +59,6 @@ class LoginActivity : AppCompatActivity() {
         btnGoogle.setOnClickListener(View.OnClickListener {
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if(account!= null){
-
                 val query = userRef.whereEqualTo("email",account.email).limit(1)
                 query.get()
                     .addOnSuccessListener { documents->
@@ -190,9 +189,10 @@ class LoginActivity : AppCompatActivity() {
     fun registerUser(account:GoogleSignInAccount){
         toggleLoad(true)
 
+        val username = getUsername(account.email)
         val data = User(
             fullname =  account.displayName,
-            username = account.displayName,
+            username = username,
             email = account.email,
             password = "",
             description = "",
@@ -212,6 +212,18 @@ class LoginActivity : AppCompatActivity() {
             }
 
 
+    }
+    fun getUsername(value:String?): String{
+        var username = ""
+        var usr = value!!.toCharArray()
+        for(i in 0 ..usr.size){
+            if(usr[i] != '@'){
+                username+= usr[i]
+            }else{
+                break
+            }
+        }
+        return username
     }
 
 

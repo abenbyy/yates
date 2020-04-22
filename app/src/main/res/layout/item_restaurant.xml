@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Restaurant Name"
-                android:textColor="@color/fontBlack"
+                android:textStyle="bold"
                 android:fontFamily="@font/raisonne_font"
                 android:textSize="18sp"
                 android:layout_marginVertical="5dp"/>

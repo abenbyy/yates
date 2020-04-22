@@ -83,4 +83,5 @@
     <string name="phone">Telepon</string>
     <string name="type">Tipe</string>
     <string name="meal">Jenis Makanan</string>
+    <string name="changes_saved">Perubahan Tersimpan</string>
 </resources>

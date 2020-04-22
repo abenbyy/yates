@@ -15,7 +15,7 @@ import com.abencrauz.yates.models.UserReview
 
 class ReviewFragment() : Fragment() {
 
-    lateinit var listReview:MutableList<UserReview>
+    var listReview:MutableList<UserReview> = mutableListOf()
 
     lateinit var reviewRecycleViewAdapter:ReviewRecycleViewAdapter
 
